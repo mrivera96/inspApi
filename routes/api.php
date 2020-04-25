@@ -23,6 +23,14 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'vehiculos'], function(){
    Route::group(['middleware' => 'auth:api'], function(){
-     Route::get('listar', 'VehiculosController@listarVehiculos');
+     Route::get('list', 'VehiculosController@listVehiculos');
+     Route::get('search', 'VehiculosController@searchVehiculo');
+       Route::get('getData', 'VehiculosController@getVehiculoData');
    });
+});
+
+Route::group(['prefix' => 'usuarios'], function(){
+    Route::group(['middleware' => 'auth:api'], function(){
+        Route::get('listar', 'UsuariosController@listarUsuarios');
+    });
 });

@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Agencia;
+use App\Inspeccion;
 use Exception;
 use Illuminate\Http\Request;
 
-class AgenciasController extends Controller
+class InspeccionesController extends Controller
 {
-    public function listarAgencias(){
+    public function listarInspecciones(){
         try{
-            $agencias = Agencia::all();
+            $inspecciones = Inspeccion::all();
             return response()->json([
                 'error' => 0,
-                'data' => $agencias],
+                'data' => $inspecciones],
                 200);
         }catch (Exception $ex){
             return response()->json([
                 'error' => 1,
-                'data' => $ex->getMessage()],
+                'message' => $ex->getMessage()],
                 500);
         }
-
     }
 }

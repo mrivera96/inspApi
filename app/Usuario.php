@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 
-class Usuarios extends Authenticatable
+class Usuario extends Authenticatable
 {
     use  HasApiTokens, Notifiable;
 

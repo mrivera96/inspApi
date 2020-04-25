@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Usuarios;
+use App\Usuario;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,32 +22,40 @@ class AuthController extends Controller
         $password = $request->password;
 
         if(UsuariosController::existeUsuario($nickname) != 0){
-            $cripPass = utf8_encode($this->encriptar($password));
-            $auth = Usuarios::where('nickUsuario', $nickname)->where('passUsuario', $cripPass)->first();
+            if(UsuariosController::usuarioActivo($nickname)>0){
+                $cripPass = utf8_encode($this->encriptar($password));
+                $auth = Usuario::where('nickUsuario', $nickname)->where('passUsuario', $cripPass)->first();
 
-            if ($auth) {
-                Auth::login($auth);
-                $user = Auth::user();
-                $tkn =  $user->createToken('XploreInspApi')->accessToken;
-                /*
-                 * Expiracion del token
-                 * if ($request->remember_me) {
-                    $tkn->expires_at = Carbon::now()->addWeeks(1);
-                }*/
-                return response()->json(
-                    [
-                        'error' => 0,
-                        'user' => $user,
-                        'access_token' => $tkn
-                    ],
-                    200
-                );
-            } else {
+                if ($auth) {
+                    Auth::login($auth);
+                    $user = Auth::user();
+                    $tkn =  $user->createToken('XploreInspApi')->accessToken;
+                    $user->access_token = $tkn;
+                    /*
+                     * Expiracion del token
+                     * if ($request->remember_me) {
+                        $tkn->expires_at = Carbon::now()->addWeeks(1);
+                    }*/
+                    return response()->json(
+                        [
+                            'error' => 0,
+                            'user' => $user,
+                        ],
+                        200
+                    );
+                } else {
+                    return response()->json([
+                        'error' => 1,
+                        'message' => 'Las credenciales que ha ingresado no son correctas.'
+                    ], 401);
+                }
+            }else{
                 return response()->json([
                     'error' => 1,
-                    'message' => 'Las credenciales que ha ingresado no son correctas.'
+                    'message' => 'Su usuario se encuentra inactivo. Comuníquese con el departamento de IT para resolver el conflicto.'
                 ], 401);
             }
+
 
         }else{
             return response()->json([
@@ -90,8 +99,19 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
-        return response()->json(['message' =>
-            'Successfully logged out']);
+        try {
+            $request->user()->token()->revoke();
+
+            return response()->json([
+                'error' => 0,
+                'message' => 'Successfully logged out'],
+                200);
+        }catch (Exception $ex){
+            return response()->json([
+                'error' => 1,
+                'message' => $ex->getMessage()],
+                500);
+        }
+
     }
 }
