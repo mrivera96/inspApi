@@ -62,7 +62,7 @@ class VehiculosController extends Controller
                 'color',
                 'numMatricula'
                 ]);
-            //return response()->json($vehiculos);
+
             $vehiculo = (object) [];
 
             foreach ($vehiculos as $vehi){
