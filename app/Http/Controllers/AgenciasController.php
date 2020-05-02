@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AgenciasController extends Controller
 {
-    public function listarAgencias(){
+    public function listar(){
         try{
             $agencias = Agencia::all();
             return response()->json([

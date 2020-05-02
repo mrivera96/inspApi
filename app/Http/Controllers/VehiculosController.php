@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Tanque;
+use App\TipoVehiculo;
 use App\Vehiculo;
 use Exception;
 use Illuminate\Http\Request;
@@ -30,7 +32,7 @@ class VehiculosController extends Controller
          }
     }
 
-    public function searchVehiculo(Request $request){
+    public function buscarVehiculo(Request $request){
          $request->validate([
             'busqueda' => 'required'
          ]);
@@ -50,7 +52,7 @@ class VehiculosController extends Controller
         }
     }
 
-    public function getVehiculoData(Request $request){
+    public function getDetalleVehiculo(Request $request){
          $request->validate(['nemVehiculo' => 'required']);
          $nVehiculo = $request->nemVehiculo;
         try{
@@ -81,6 +83,37 @@ class VehiculosController extends Controller
         }catch (Exception $ex){
             return response()->json([
                 'error'=> 1,
+                'message' => $ex->getMessage()],
+                500);
+        }
+    }
+
+    public function getTipos(){
+         try{
+             $tiposVehiculos = TipoVehiculo::all();
+             return response()->json([
+                 'error'=> 0,
+                 'data' => $tiposVehiculos],
+                 200);
+         }catch (Exception $ex){
+             return response()->json([
+                 'error'=> 0,
+                 'message' => $ex->getMessage()],
+                 500);
+         }
+
+    }
+
+    public function getTanquesComb(){
+        try{
+            $tanques = Tanque::all();
+            return response()->json([
+                'error'=> 0,
+                'data' => $tanques],
+                200);
+        }catch (Exception $ex){
+            return response()->json([
+                'error'=> 0,
                 'message' => $ex->getMessage()],
                 500);
         }

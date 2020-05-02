@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Usuario;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,11 +32,7 @@ class AuthController extends Controller
                     $user = Auth::user();
                     $tkn =  $user->createToken('XploreInspApi')->accessToken;
                     $user->access_token = $tkn;
-                    /*
-                     * Expiracion del token
-                     * if ($request->remember_me) {
-                        $tkn->expires_at = Carbon::now()->addWeeks(1);
-                    }*/
+
                     return response()->json(
                         [
                             'error' => 0,
@@ -100,6 +97,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
+
             $request->user()->token()->revoke();
 
             return response()->json([

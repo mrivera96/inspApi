@@ -19,7 +19,7 @@ class CreateInspeccionesTable extends Migration
             $table->integer('idCliente')->unsigned();
             $table->integer('idVehiculo')->unsigned();//revisar relación vehículos-tipoVehiculo
             $table->integer('idAgenciaSalida')->unsigned();
-            $table->integer('comSalida');
+            $table->integer('combSalida');
             $table->integer('redCombSalida');
             $table->integer('odoSalida');
             $table->dateTime('fechaSalida');
@@ -45,10 +45,10 @@ class CreateInspeccionesTable extends Migration
         Schema::table('tblInspecciones', function (Blueprint $table){
             $table->foreign('idCliente')->references('idCliente')->on('tblClientes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('idVehiculo')->references('idVehiculo')->on('tblVehiculos')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idAgenciaSalida')->references('idAgencia')->on('clsAgencias')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idUsuarioSalida')->references('idUsuario')->on('tblUsuarios')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idAgenciaEntrega')->references('idAgencia')->on('clsAgencias')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idUsuarioEntrega')->references('idUsuario')->on('tblUsuarios')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idAgenciaSalida')->references('idAgencia')->on('clsAgencias');
+            $table->foreign('idUsuarioSalida')->references('idUsuario')->on('tblUsuarios');
+            $table->foreign('idAgenciaEntrega')->references('idAgencia')->on('clsAgencias');
+            $table->foreign('idUsuarioEntrega')->references('idUsuario')->on('tblUsuarios');
             $table->foreign('idEstado')->references('idEstado')->on('clsEstados')->onDelete('cascade')->onUpdate('cascade');
 
         });

@@ -23,14 +23,33 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'vehiculos'], function(){
    Route::group(['middleware' => 'auth:api'], function(){
-     Route::get('list', 'VehiculosController@listVehiculos');
-     Route::get('search', 'VehiculosController@searchVehiculo');
-       Route::get('getData', 'VehiculosController@getVehiculoData');
+     Route::get('buscar', 'VehiculosController@buscarVehiculo');
+     Route::get('getDetalle', 'VehiculosController@getDetalleVehiculo');
+     Route::get('getTipos', 'VehiculosController@getTipos');
+     Route::get('getTanques', 'VehiculosController@getTanquesComb');
    });
+});
+
+Route::group(['prefix' => 'agencias'], function (){
+    Route::group(['middleware' => 'auth:api'], function (){
+        Route::get('listar', 'AgenciasController@listar');
+    });
+});
+
+Route::group(['prefix' => 'inspecciones'], function (){
+    Route::group(['middleware' => 'auth:api'], function (){
+        Route::post('crear', 'InspeccionesController@crearInspeccion');
+    });
 });
 
 Route::group(['prefix' => 'usuarios'], function(){
     Route::group(['middleware' => 'auth:api'], function(){
         Route::get('listar', 'UsuariosController@listarUsuarios');
+    });
+});
+
+Route::group(['prefix' => 'accesorios'], function (){
+    Route::group(['middleware' => 'auth:api'], function (){
+        Route::get('listar', 'AccesoriosController@listar');
     });
 });

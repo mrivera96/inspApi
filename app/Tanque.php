@@ -8,4 +8,5 @@ class Tanque extends Model
 {
     protected $table = 'clsTanqueComb';
     public $timestamps = false;
+    protected $primaryKey = 'idTanqueComb';
 }

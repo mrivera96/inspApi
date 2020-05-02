@@ -22,4 +22,8 @@ class InspeccionesController extends Controller
                 500);
         }
     }
+
+    public function crearInspeccion(Request $request){
+        return response()->json($request->all());
+    }
 }
