@@ -16,30 +16,27 @@ class CreateInspeccionesTable extends Migration
         Schema::create('tblInspecciones', function (Blueprint $table) {
             $table->increments('idInspeccion');
             //$table->string('numContrato', 20)->unsigned();
-            $table->integer('idCliente')->unsigned();
+            $table->integer('idCliente')->unsigned()->nullable();
             $table->integer('idVehiculo')->unsigned();//revisar relación vehículos-tipoVehiculo
             $table->integer('idAgenciaSalida')->unsigned();
             $table->integer('combSalida');
-            $table->integer('redCombSalida');
+            $table->integer('rendCombSalida');
             $table->integer('odoSalida');
             $table->dateTime('fechaSalida');
             $table->integer('idUsuarioSalida')->unsigned();
-            $table->string('firmaClienteSalida', 80);
-            $table->string('obsSalida');
-            $table->integer('idAgenciaEntrega')->unsigned();
-            $table->integer('combEntrega');
-            $table->integer('rendCombEntrega');
-            $table->integer('odoEntrega');
-            $table->dateTime('fechaEntrega');
-            $table->integer('idUsuarioEntrega')->unsigned();
-            $table->string('firmaClienteEntrega');
-            $table->string('obsEntrega');
+            $table->string('firmaClienteSalida', 80)->nullable();
+            $table->integer('idAgenciaEntrega')->unsigned()->nullable();
+            $table->integer('combEntrega')->nullable();
+            $table->integer('rendCombEntrega')->nullable();
+            $table->integer('odoEntrega')->nullable();
+            $table->dateTime('fechaEntrega')->nullable();
+            $table->integer('idUsuarioEntrega')->unsigned()->nullable();
+            $table->string('firmaClienteEntrega')->nullable();
             $table->string('nomRecibeVehiculo');
-            $table->string('nomEntregaVehiculo');
+            $table->string('nomEntregaVehiculo')->nullable();
             $table->integer('idEstado')->unsigned();
             $table->dateTime('fechaProceso');
 
-            $table->timestamps();
         });
 
         Schema::table('tblInspecciones', function (Blueprint $table){

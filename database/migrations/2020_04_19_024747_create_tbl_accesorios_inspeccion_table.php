@@ -16,7 +16,7 @@ class CreateTblAccesoriosInspeccionTable extends Migration
         Schema::create('tbl_accesorios_inspeccion', function (Blueprint $table) {
             $table->integer('idInspeccion')->unsigned();
             $table->integer('idAccesorio')->unsigned();
-            $table->string('tipo',2);
+            $table->string('tipo', 2);
             $table->integer('cantidad');
             $table->timestamps();
         });

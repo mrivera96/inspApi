@@ -12,5 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(ClsAccesoriosSeeder::class);
+        $this->call(clsTipoEstadosSeeder::class);
+        $this->call(clsEstadosSeeder::class);
     }
 }

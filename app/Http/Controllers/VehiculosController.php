@@ -38,11 +38,13 @@ class VehiculosController extends Controller
          ]);
          $busqueda = $request->busqueda;
         try {
-            $vehiculos = Vehiculo::where('nemVehiculo','LIKE', "{$busqueda}%")->get(['nemVehiculo','modelo']);
+            $vehiculos = Vehiculo::where('nemVehiculo','LIKE', "{$busqueda}%")->get(['nemVehiculo','modelo', 'idVehiculo']);
+            
             return response()->json([
                 'error'=> 0,
                 'data' => $vehiculos],
                 200);
+            
 
         }catch (Exception $ex){
             return response()->json([
@@ -56,30 +58,41 @@ class VehiculosController extends Controller
          $request->validate(['nemVehiculo' => 'required']);
          $nVehiculo = $request->nemVehiculo;
         try{
+            
             $vehiculos = Vehiculo::where('nemVehiculo', $nVehiculo)->get([
                 'nemVehiculo',
                 'idModeloVehiculo',
                 'idTipoCombustible',
                 'tipoKilometraje',
                 'color',
-                'numMatricula'
+                'numMatricula',
+                'idVehiculo'
                 ]);
 
-            $vehiculo = (object) [];
+            if(InspeccionesController::existeInspeccionByVehiculo($vehiculos->first()->idVehiculo) == 0){
+                $vehiculo = (object) [];
 
-            foreach ($vehiculos as $vehi){
-                $vehiculo->nemVehiculo = $vehi->nemVehiculo;
-                $vehiculo->tipoKilometraje = $vehi->tipoKilometraje;
-                $vehiculo->color = $vehi->color;
-                $vehiculo->modelo = $vehi->modelo()->get()->first();
-                $vehiculo->modelo->marca = $vehi->modelo->marca()->get()->first();
-                $vehiculo->combustible = $vehi->combustible()->get()->first();
-                $vehiculo->placa = $vehi->numMatricula;
+                foreach ($vehiculos as $vehi){
+                    $vehiculo->nemVehiculo = $vehi->nemVehiculo;
+                    $vehiculo->tipoKilometraje = $vehi->tipoKilometraje;
+                    $vehiculo->color = $vehi->color;
+                    $vehiculo->modelo = $vehi->modelo()->get()->first();
+                    $vehiculo->modelo->marca = $vehi->modelo->marca()->get()->first();
+                    $vehiculo->combustible = $vehi->combustible()->get()->first();
+                    $vehiculo->placa = $vehi->numMatricula;
+                }
+                return response()->json([
+                    'error'=> 0,
+                    'data' => $vehiculo],
+                    200);
             }
+    
             return response()->json([
-                'error'=> 0,
-                'data' => $vehiculo],
+                'error'=> 1,
+                'message' => 'Ya hay una inspección abierta para ese vehículo.'],
                 200);
+
+            
         }catch (Exception $ex){
             return response()->json([
                 'error'=> 1,

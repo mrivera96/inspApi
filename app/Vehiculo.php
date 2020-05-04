@@ -18,4 +18,8 @@ class Vehiculo extends Model
         return $this->hasOne('App\Combustible', 'idTipoCombustible', 'idTipoCombustible');
     }
 
+    public function inspeccion(){
+        return $this->belongsTo('App\Inspeccion', 'idVehiculo', 'idVehiculo');
+    }
+
 }
