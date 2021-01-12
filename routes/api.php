@@ -38,7 +38,10 @@ Route::group(['prefix' => 'agencias'], function (){
 
 Route::group(['prefix' => 'inspecciones'], function (){
     Route::group(['middleware' => 'auth:api'], function (){
-        Route::post('crear', 'InspeccionesController@crearInspeccion');
+        Route::post('agregar', 'InspeccionesController@crearInspeccion');
+        Route::get('listar', 'InspeccionesController@listarInspecciones');
+        Route::get('getById', 'InspeccionesController@getInspeccionById');
+        Route::post('cerrar', 'InspeccionesController@cerrarInspeccion');
     });
 });
 
