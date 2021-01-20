@@ -44,5 +44,9 @@ class Inspeccion extends Model
         return $this->hasOne('App\Agencia', 'idAgencia', 'idAgenciaSalida');
     }
 
+    public function estado(){
+        return $this->hasOne('App\Estado', 'idEstado', 'idEstado');
+    }
+
 
 }
