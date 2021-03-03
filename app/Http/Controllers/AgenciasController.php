@@ -10,7 +10,7 @@ class AgenciasController extends Controller
 {
     public function listar(){
         try{
-            $agencias = Agencia::all();
+            $agencias = Agencia::where(['idEmpresa' => 1, 'isActivo' => 1])->get();
             return response()->json([
                 'error' => 0,
                 'data' => $agencias],
