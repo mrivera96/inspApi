@@ -17,4 +17,8 @@ class Modelo extends Model
     public function marca(){
         return $this->belongsTo('App\Marca', 'idMarcaVehiculo', 'idMarcaVehiculo');
     }
+
+    public function tarifa(){
+        return $this->belongsTo('App\Tarifa','idTarifa','idTarifa');
+    }
 }

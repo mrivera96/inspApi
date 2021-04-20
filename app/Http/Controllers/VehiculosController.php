@@ -3,22 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Tanque;
-use App\TipoVehiculo;
+use App\Tarifa;
 use App\Vehiculo;
 use Exception;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Cast\Object_;
 
 
 class VehiculosController extends Controller
 {
      public function listVehiculos(){
          try{
-             $vehiculos = Vehiculo::all();
-             foreach ($vehiculos as $vehiculo){
-                 $vehiculo->modelo = $vehiculo->modelo()->get()->first();
-                 $vehiculo->modelo->marca = $vehiculo->modelo->marca()->get()->first();
-             }
+             $vehiculos = Vehiculo::with(['modelo.marca','modelo.tarifa']);
 
              return response()->json([
                  'error'=> 0,
@@ -39,12 +34,12 @@ class VehiculosController extends Controller
          $busqueda = $request->busqueda;
         try {
             $vehiculos = Vehiculo::where('nemVehiculo','LIKE', "{$busqueda}%")->get(['nemVehiculo','modelo', 'idVehiculo']);
-            
+
             return response()->json([
                 'error'=> 0,
                 'data' => $vehiculos],
                 200);
-            
+
 
         }catch (Exception $ex){
             return response()->json([
@@ -58,7 +53,7 @@ class VehiculosController extends Controller
          $request->validate(['nemVehiculo' => 'required']);
          $nVehiculo = $request->nemVehiculo;
         try{
-            
+
             $vehiculos = Vehiculo::where('nemVehiculo', $nVehiculo)->get([
                 'nemVehiculo',
                 'idModeloVehiculo',
@@ -76,9 +71,10 @@ class VehiculosController extends Controller
                     $vehiculo->nemVehiculo = $vehi->nemVehiculo;
                     $vehiculo->tipoKilometraje = $vehi->tipoKilometraje;
                     $vehiculo->color = $vehi->color;
-                    $vehiculo->modelo = $vehi->modelo()->get()->first();
-                    $vehiculo->modelo->marca = $vehi->modelo->marca()->get()->first();
-                    $vehiculo->combustible = $vehi->combustible()->get()->first();
+                    $vehiculo->modelo = $vehi->modelo()->get()->first()->nomModelo;
+                    $vehiculo->marca = $vehi->modelo->marca()->get()->first()->descMarca;
+                    $vehiculo->tipoVehiculo = $vehi->modelo->tarifa()->get()->first()->descTarifa;
+                    $vehiculo->combustible = $vehi->combustible()->get()->first()->descTipoComb;
                     $vehiculo->placa = $vehi->numMatricula;
                 }
                 return response()->json([
@@ -86,13 +82,13 @@ class VehiculosController extends Controller
                     'data' => $vehiculo],
                     200);
             }
-    
+
             return response()->json([
                 'error'=> 1,
                 'message' => 'Ya hay una inspección abierta para ese vehículo.'],
                 200);
 
-            
+
         }catch (Exception $ex){
             return response()->json([
                 'error'=> 1,
@@ -103,14 +99,14 @@ class VehiculosController extends Controller
 
     public function getTipos(){
          try{
-             $tiposVehiculos = TipoVehiculo::all();
+             $tiposVehiculos = Tarifa::all();
              return response()->json([
                  'error'=> 0,
                  'data' => $tiposVehiculos],
                  200);
          }catch (Exception $ex){
              return response()->json([
-                 'error'=> 0,
+                 'error'=> 1,
                  'message' => $ex->getMessage()],
                  500);
          }
