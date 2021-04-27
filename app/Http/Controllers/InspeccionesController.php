@@ -51,6 +51,7 @@ class InspeccionesController extends Controller
         $dGenerales = $request->form['datosGenerales'];
         $dSalida = $request->form['datosSalida'];
         $firma = $request->form['firma'];
+        $damages = $request->form['danios'];
 
         try {
             $nInspeccion = new Inspeccion();
@@ -72,6 +73,14 @@ class InspeccionesController extends Controller
                 $imageName = Str::random(15) . time() . '.png';
                 \File::put(public_path() . '/img/firmas/' . $imageName, base64_decode($image));
                 $nInspeccion->firmaClienteSalida =  '/img/firmas/' . $imageName;
+            }
+
+            if ($damages != null) {
+                $imageDamages = str_replace('data:image/png;base64,', '', $damages);
+                $imageDamages = str_replace(' ', '+', $imageDamages);
+                $imageDamageName = Str::random(15) . time() . '.png';
+                \File::put(public_path() . '/img/danios/' . $imageDamageName, base64_decode($imageDamages));
+                $nInspeccion->daniosSalida =  '/img/danios/' . $imageDamageName;
             }
 
             $nInspeccion->nomRecibeVehiculo = $firma['nomRecibeVehiculo'];
@@ -101,7 +110,7 @@ class InspeccionesController extends Controller
             ->where('idInspeccion', $request->idInspeccion)
             ->get()
             ->first();
-            
+
             $inspeccion->vehiculo;
             $inspeccion->vehiculo->modelo = $inspeccion->vehiculo->modelo()->get()->first();
             $inspeccion->vehiculo->marca = $inspeccion->vehiculo->modelo->marca()->get()->first();
