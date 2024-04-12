@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Usuario;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,10 +22,10 @@ class AuthController extends Controller
         $nickname = $request->nickname;
         $password = $request->password;
 
-        if(UsuariosController::existeUsuario($nickname) != 0){
-            if(UsuariosController::usuarioActivo($nickname)>0){
+        if(UsersController::existeUsuario($nickname) != 0){
+            if(UsersController::usuarioActivo($nickname)>0){
                 $cripPass = utf8_encode($this->encriptar($password));
-                $auth = Usuario::where('nickUsuario', $nickname)->where('passUsuario', $cripPass)->first();
+                $auth = User::where('nickUsuario', $nickname)->where('passUsuario', $cripPass)->first();
 
                 if ($auth) {
                     Auth::login($auth);
