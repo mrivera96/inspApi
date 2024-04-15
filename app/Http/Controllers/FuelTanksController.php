@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tanque;
-use Illuminate\Http\Request;
+
+use App\Models\FuelTank;
+use Illuminate\Http\JsonResponse;
 
 class FuelTanksController extends Controller
 {
-    public function listarTanques(){
+    public function list(): JsonResponse
+    {
         try {
-            $tanques = Tanque::all();
+            $tanks = FuelTank::all();
             return response()->json([
-                'error' => 0,
-                'data' => $tanques],
-                200);
+                    'error' => 0,
+                    'data' => $tanks]
+            );
 
-        }catch (\Exception $ex){
+        } catch (\Exception $ex) {
             return response()->json([
                 'error' => 1,
                 'data' => $ex->getMessage()],

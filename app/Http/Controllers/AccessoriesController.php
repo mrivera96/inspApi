@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Accesory;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controller;
+use App\Models\Accessory;
 
 class AccessoriesController extends Controller
 {
-    public function list(){
+    public function list(): JsonResponse
+    {
         try {
-            $accesorios = Accesory::all();
+            $accessories = Accessory::all();
             return response()->json([
                 'error' => 0,
-                'data' => $accesorios
-            ],
-                200);
-        }catch (\Exception $ex){
+                'data' => $accessories
+            ]);
+        } catch (\Exception $ex) {
             return response()->json([
                 'error' => 1,
                 'message' => $ex->getMessage()

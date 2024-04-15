@@ -2,129 +2,102 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tanque;
-use App\Models\Tarifa;
-use App\Models\Vehiculo;
+use App\Models\Car;
+use App\Models\Rate;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 
 class CarsController extends Controller
 {
-     public function listVehiculos(){
-         try{
-             $vehiculos = Vehiculo::with(['modelo.marca','modelo.tarifa']);
-
-             return response()->json([
-                 'error'=> 0,
-                 'data' => $vehiculos],
-                 200);
-         }catch (Exception $ex){
-             return response()->json([
-                 'error'=> 1,
-                 'message' => $ex->getMessage()],
-                 500);
-         }
-    }
-
-    public function buscarVehiculo(Request $request){
-         $request->validate([
-            'busqueda' => 'required'
-         ]);
-         $busqueda = $request->busqueda;
+    public function list(): JsonResponse
+    {
         try {
-            $vehiculos = Vehiculo::where('nemVehiculo','LIKE', "{$busqueda}%")->get(['nemVehiculo','modelo', 'idVehiculo']);
+            $cars = Car::with(['model.brand', 'model.rate'])->get();
 
             return response()->json([
-                'error'=> 0,
-                'data' => $vehiculos],
-                200);
-
-
-        }catch (Exception $ex){
+                    'error' => 0,
+                    'data' => $cars]
+            );
+        } catch (Exception $ex) {
             return response()->json([
-                'error'=> 1,
+                'error' => 1,
                 'message' => $ex->getMessage()],
                 500);
         }
     }
 
-    public function getDetalleVehiculo(Request $request){
-         $request->validate(['nemVehiculo' => 'required']);
-         $nVehiculo = $request->nemVehiculo;
-        try{
+    public function search(Request $request): JsonResponse
+    {
+        $request->validate([
+            'busqueda' => 'required'
+        ]);
+        $term = $request->busqueda;
+        try {
+            $cars = Car::where('nemVehiculo', 'LIKE', "$term%")->get(['nemVehiculo', 'modelo', 'idVehiculo']);
 
-            $vehiculos = Vehiculo::where('nemVehiculo', $nVehiculo)->get([
+            return response()->json([
+                'error' => 0,
+                'data' => $cars]);
+
+
+        } catch (Exception $ex) {
+            return response()->json([
+                'error' => 1,
+                'message' => $ex->getMessage()],
+                500);
+        }
+    }
+
+    public function getDetails(Request $request): JsonResponse
+    {
+        $request->validate(['nemVehiculo' => 'required']);
+        $nVehiculo = $request->nemVehiculo;
+        try {
+
+            $car = Car::with(['model.brand', 'model.rate', 'fuel'])->where('nemVehiculo', $nVehiculo)->get([
                 'nemVehiculo',
-                'idModeloVehiculo',
-                'idTipoCombustible',
                 'tipoKilometraje',
                 'color',
-                'numMatricula',
-                'idVehiculo'
-                ]);
+                'numMatricula'
+            ]);
 
-            if(InspectionsController::existeInspeccionByVehiculo($vehiculos->first()->idVehiculo) == 0){
-                $vehiculo = (object) [];
+            if (InspectionsController::inspectionByCar($car->first()->idVehiculo) == 0) {
+                //$car = (object)[];
 
-                foreach ($vehiculos as $vehi){
-                    $vehiculo->nemVehiculo = $vehi->nemVehiculo;
-                    $vehiculo->tipoKilometraje = $vehi->tipoKilometraje;
-                    $vehiculo->color = $vehi->color;
-                    $vehiculo->modelo = $vehi->modelo()->get()->first()->nomModelo;
-                    $vehiculo->marca = $vehi->modelo->marca()->get()->first()->descMarca;
-                    $vehiculo->tipoVehiculo = $vehi->modelo->tarifa()->get()->first()->descTarifa;
-                    $vehiculo->combustible = $vehi->combustible()->get()->first()->descTipoComb;
-                    $vehiculo->placa = $vehi->numMatricula;
-                }
                 return response()->json([
-                    'error'=> 0,
-                    'data' => $vehiculo],
-                    200);
+                    'error' => 0,
+                    'data' => $car]);
             }
 
             return response()->json([
-                'error'=> 1,
-                'message' => 'Ya hay una inspección abierta para ese vehículo.'],
-                200);
+                'error' => 1,
+                'message' => 'Ya hay una inspección abierta para ese vehículo.']);
 
 
-        }catch (Exception $ex){
+        } catch (Exception $ex) {
             return response()->json([
-                'error'=> 1,
+                'error' => 1,
                 'message' => $ex->getMessage()],
                 500);
         }
     }
 
-    public function getTipos(){
-         try{
-             $tiposVehiculos = Tarifa::all();
-             return response()->json([
-                 'error'=> 0,
-                 'data' => $tiposVehiculos],
-                 200);
-         }catch (Exception $ex){
-             return response()->json([
-                 'error'=> 1,
-                 'message' => $ex->getMessage()],
-                 500);
-         }
-
-    }
-
-    public function getTanquesComb(){
-        try{
-            $tanques = Tanque::all();
+    public function getTypes(): JsonResponse
+    {
+        try {
+            $carTypes = Rate::all();
             return response()->json([
-                'error'=> 0,
-                'data' => $tanques],
-                200);
-        }catch (Exception $ex){
+                'error' => 0,
+                'data' => $carTypes]);
+        } catch (Exception $ex) {
             return response()->json([
-                'error'=> 0,
+                'error' => 1,
                 'message' => $ex->getMessage()],
                 500);
         }
+
     }
+
 }

@@ -4,45 +4,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inspection extends Model
 {
-    protected $table = 'tblInspecciones';
-    public $timestamps = false;
+    protected $table = 'Inspecciones.tblInspecciones';
     protected $primaryKey = 'idInspeccion';
+    const CREATED_AT = 'fechaCreacion';
+    const UPDATED_AT = 'fechaModificacion';
 
-    protected $fillable = [
-        'idInspeccion',
-        'numContrato',
-        'idCliente',
-        'idVehiculo',
-        'idAgenciaSalida',
-        'combSalida',
-        'rendCombSalida',
-        'odoSalida',
-        'fechaSalida',
-        'idUsuarioSalida',
-        'firmaClienteSalida',
-        'idAgenciaEntrega',
-        'combEntrega',
-        'rendCombEntrega',
-        'odoEntrega',
-        'fechaEntrega',
-        'idUsuarioEntrega',
-        'firmaClienteEntrega',
-        'nomRecibeVehiculo',
-        'nomEntregaVehiculo',
-        'idEstado',
-        'fechaProceso'
-    ];
-
-
-    public function car(){
+    public function car(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
         return $this->hasOne('App\Models\Car','idVehiculo', 'idVehiculo');
     }
 
-    public function checkOutAgency(){
+    public function checkOutAgency(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
         return $this->hasOne('App\Models\Agency', 'idAgencia', 'idAgenciaSalida');
     }
 
-    public function state(){
+    public function state(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
         return $this->hasOne('App\Models\State', 'idEstado', 'idEstado');
     }
 

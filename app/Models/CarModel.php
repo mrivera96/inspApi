@@ -16,7 +16,7 @@ class CarModel extends Model
         return $this->belongsTo('App\Models\Brand', 'idMarcaVehiculo', 'idMarcaVehiculo');
     }
 
-    public function fee(){
-        return $this->belongsTo('App\Models\Fee','idTarifa','idTarifa');
+    public function rate(){
+        return $this->belongsTo('App\Models\Rate','idTarifa','idTarifa');
     }
 }

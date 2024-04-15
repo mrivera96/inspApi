@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -24,7 +25,8 @@ class UsersController extends Controller
 
     }
 
-    public function listarUsuarios(){
+    public function list(): \Illuminate\Http\JsonResponse
+    {
         try {
             $usuarios = User::all();
             return response()->json([
@@ -39,7 +41,7 @@ class UsersController extends Controller
         }
     }
 
-    public function validarCredenciales($nickname, $password)
+    public function validarCredenciales($nickname, $password): bool
     {
         //return Hash::check($password, $this->passUsuario);
         $myPass = DB::table('tblUsuarios')->select()->where('nickUsuario',$nickname)->get()->first();

@@ -13,7 +13,7 @@ return new class extends Migration
     {
 
 
-        Schema::create('inspecciones.sessions', function (Blueprint $table) {
+        Schema::create('Inspecciones.sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration
     public function down(): void
     {
 
-        Schema::dropIfExists('inspecciones.sessions');
+        Schema::dropIfExists('Inspecciones.sessions');
     }
 };

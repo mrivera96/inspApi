@@ -2,31 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inspeccion;
-use App\Models\Vehiculo;
+
+use App\Models\Car;
+use App\Models\Inspection;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Accesory;
 
 
 class InspectionsController extends Controller
 {
-    public function listarInspecciones()
+    public function list(): JsonResponse
     {
         try {
-            $inspecciones = Inspeccion::all();
-            foreach ($inspecciones as $inspeccion) {
-                $inspeccion->vehiculo;
-            }
+            $inspections = Inspection::with(['car'])->get();
+
             return response()->json(
                 [
                     'error' => 0,
-                    'data' => $inspecciones
-                ],
-                200
+                    'data' => $inspections
+                ]
             );
         } catch (Exception $ex) {
             return response()->json(
@@ -39,40 +37,39 @@ class InspectionsController extends Controller
         }
     }
 
-    public static function existeInspeccionByVehiculo($idVehiculo)
+    public static function inspectionByCar($idVehiculo): int
     {
-        $existeInspeccion = Inspeccion::where('idVehiculo', $idVehiculo)->where('idEstado', 32)->count();
-        return $existeInspeccion;
+        return Inspection::where('idVehiculo', $idVehiculo)->where('idEstado', 32)->count();
     }
 
-    public function crearInspeccion(Request $request)
+    public function create(Request $request): JsonResponse
     {
-        $accesorios = $request->form['accesorios'];
-        $dGenerales = $request->form['datosGenerales'];
-        $dSalida = $request->form['datosSalida'];
-        $firma = $request->form['firma'];
+        $accessories = $request->form['accesorios'];
+        $generalData = $request->form['datosGenerales'];
+        $checkoutData = $request->form['datosSalida'];
+        $sign = $request->form['firma'];
         $damages = $request->form['danios'];
 
         try {
-            $nInspeccion = new Inspeccion();
-            $id = Vehiculo::where('nemVehiculo', $dGenerales['nVehiculo'])->get()->first();
-            $nInspeccion->idVehiculo = $id->idVehiculo;
-            $nInspeccion->idAgenciaSalida = $dSalida['idAgenciaSalida'];
-            $nInspeccion->combSalida = $dSalida['combSalida'];
-            $nInspeccion->rendCombSalida = $dSalida['rendCombSalida'];
-            $nInspeccion->odoSalida = $dSalida['odoSalida'];
-            $date = date('Y-m-d', strtotime($dSalida['fechaSalida']));
-            $time = $dSalida['horaSalida'];
+            $newInspection = new Inspection();
+            $id = Car::where('nemVehiculo', $generalData['nVehiculo'])->get()->first();
+            $newInspection->idVehiculo = $id->idVehiculo;
+            $newInspection->idAgenciaSalida = $checkoutData['idAgenciaSalida'];
+            $newInspection->combSalida = $checkoutData['combSalida'];
+            $newInspection->rendCombSalida = $checkoutData['rendCombSalida'];
+            $newInspection->odoSalida = $checkoutData['odoSalida'];
+            $date = date('Y-m-d', strtotime($checkoutData['fechaSalida']));
+            $time = $checkoutData['horaSalida'];
             $datetime = $date . ' ' . $time;
-            $nInspeccion->fechaSalida = new Carbon($datetime);
-            $nInspeccion->idUsuarioSalida = Auth::user()->idUsuario;
+            $newInspection->fechaSalida = new Carbon($datetime);
+            $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
 
-            if ($firma['firmaClienteSalida']) {
-                $image = str_replace('data:image/png;base64,', '', $firma['firmaClienteSalida']);
+            if ($sign['firmaClienteSalida']) {
+                $image = str_replace('data:image/png;base64,', '', $sign['firmaClienteSalida']);
                 $image = str_replace(' ', '+', $image);
                 $imageName = Str::random(15) . time() . '.png';
                 \File::put(public_path() . '/img/firmas/' . $imageName, base64_decode($image));
-                $nInspeccion->firmaClienteSalida =  '/img/firmas/' . $imageName;
+                $newInspection->firmaClienteSalida = '/img/firmas/' . $imageName;
             }
 
             if ($damages != null) {
@@ -80,47 +77,41 @@ class InspectionsController extends Controller
                 $imageDamages = str_replace(' ', '+', $imageDamages);
                 $imageDamageName = Str::random(15) . time() . '.png';
                 \File::put(public_path() . '/img/danios/' . $imageDamageName, base64_decode($imageDamages));
-                $nInspeccion->daniosSalida =  '/img/danios/' . $imageDamageName;
+                $newInspection->daniosSalida = '/img/danios/' . $imageDamageName;
             }
 
-            $nInspeccion->nomRecibeVehiculo = $firma['nomRecibeVehiculo'];
-            $nInspeccion->idEstado = 48;
-            $nInspeccion->fechaProceso = Carbon::now('America/Tegucigalpa');
+            $newInspection->nomRecibeVehiculo = $sign['nomRecibeVehiculo'];
+            $newInspection->idEstado = 48;
+            $newInspection->fechaProceso = Carbon::now('America/Tegucigalpa');
 
-            $nInspeccion->save();
-            InspectionAccesoriesController::insertarAccesorio($accesorios, $nInspeccion->idInspeccion);
+            $newInspection->save();
+            InspectionAccessoriesController::insertarAccesorio($accessories, $newInspection->idInspeccion);
 
             return response()->json([
                 'error' => 0,
-                'data' => $nInspeccion->idInspeccion
-            ], 200);
+                'data' => $newInspection->idInspeccion
+            ]);
         } catch (Exception $ex) {
             return response()->json([
                 'error' => 1,
                 'request' => $request->datosGenerales,
                 'message' => $ex->getMessage()
-            ], 200);
+            ]);
         }
     }
 
-    public function getInspeccionById(Request $request)
+    public function getById(Request $request): JsonResponse
     {
         try {
-            $inspeccion = Inspeccion::with('estado')
-            ->where('idInspeccion', $request->idInspeccion)
-            ->get()
-            ->first();
-
-            $inspeccion->vehiculo;
-            $inspeccion->vehiculo->modelo = $inspeccion->vehiculo->modelo()->get()->first();
-            $inspeccion->vehiculo->marca = $inspeccion->vehiculo->modelo->marca()->get()->first();
-            $inspeccion->agenciaSalida;
+            $inspection = Inspection::with(['estado','car.model.brand','checkOutAgency'])
+                ->where('idInspeccion', $request->idInspeccion)
+                ->get()
+                ->first();
             return response()->json(
                 [
                     'error' => 0,
-                    'data' => $inspeccion
-                ],
-                200
+                    'data' => $inspection
+                ]
             );
         } catch (Exception $ex) {
             return response()->json(
@@ -133,12 +124,12 @@ class InspectionsController extends Controller
         }
     }
 
-    public function cerrarInspeccion(Request $request)
+    public function close(Request $request): JsonResponse
     {
         $dEntrega = $request->form;
         $idInspeccion = $request->idInspeccion;
         try {
-            $currfInspeccion = Inspeccion::where('idInspeccion', $idInspeccion);
+            $currfInspeccion = Inspection::where('idInspeccion', $idInspeccion);
             $date = date('Y-m-d', strtotime($dEntrega['fechaEntrega']));
             $time = $dEntrega['horaEntrega'];
             $datetime = $date . ' ' . $time;
@@ -163,13 +154,13 @@ class InspectionsController extends Controller
             return response()->json([
                 'error' => 0,
                 'message' => 'La inspección ha sido cerrada correctamente.'
-            ], 200);
+            ]);
         } catch (Exception $ex) {
             return response()->json([
                 'error' => 1,
                 'request' => $request->datosGenerales,
                 'message' => $ex->getMessage()
-            ], 200);
+            ]);
         }
     }
 }
