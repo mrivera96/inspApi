@@ -4,12 +4,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class CarModel extends Model
 {
-    protected $table = 'clsModelosVehiculos';
+    protected $table = 'Xplore.dbo.clsModelosVehiculos';
     protected $primaryKey = 'idModeloVehiculo';
     public $timestamps = false;
 
     public function cars(){
-        return $this->hasMany('App\Models\Car', 'idModeloVehiculo', 'idModeloVehiculo');
+        return $this->hasMany(Car::class, 'idModeloVehiculo', 'idModeloVehiculo');
     }
 
     public function brand(){

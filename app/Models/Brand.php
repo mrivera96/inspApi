@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
-    protected $table = 'clsMarcasVehiculos';
+    protected $table = 'Xplore.dbo.clsMarcasVehiculos';
     protected $primaryKey = 'idMarcaVehiculo';
     public $timestamps = false;
 

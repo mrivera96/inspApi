@@ -50,6 +50,6 @@ Route::group(['prefix' => 'users'], function () {
 
 Route::group(['prefix' => 'accessories'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('list', [AccessoriesController::class, 'list']);
+        Route::get('list', [AccessoriesController::class, 'list']);
     });
 });

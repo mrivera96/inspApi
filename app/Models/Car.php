@@ -1,23 +1,33 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 class Car extends Model
 {
-    protected $table = 'tblVehiculos';
+    protected $table = 'Xplore.dbo.tblVehiculos';
     protected $primaryKey = 'idVehiculo';
     public $timestamps = false;
 
-    public function model(){
-        return $this->belongsTo('App\Models\CarModel', 'idModeloVehiculo', 'idModeloVehiculo');
+    public function model(): BelongsTo
+    {
+        return $this->belongsTo(CarModel::class, 'idModeloVehiculo', 'idModeloVehiculo');
     }
 
-    public function fuel(){
-        return $this->hasOne('App\Models\Fuel', 'idTipoCombustible', 'idTipoCombustible');
+    public function fuel():HasOne
+    {
+        return $this->hasOne(Fuel::class, 'idTipoCombustible', 'idTipoCombustible');
     }
 
-    public function inspection(){
-        return $this->belongsTo('App\Models\Inspection', 'idVehiculo', 'idVehiculo');
+    public function inspection(): BelongsTo
+    {
+        return $this->belongsTo(Inspection::class, 'idVehiculo', 'idVehiculo');
+    }
+
+    public function contract(): BelongsTo
+    {
+        return $this->belongsTo(Contract::class, 'idVehiculo', 'idVehiculo');
     }
 
 }

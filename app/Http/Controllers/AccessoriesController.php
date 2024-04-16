@@ -11,7 +11,7 @@ class AccessoriesController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $accessories = Accessory::all();
+            $accessories = Accessory::where('isActivo',1)->get(['idAccesorio','nomAccesorio']);
             return response()->json([
                 'error' => 0,
                 'data' => $accessories
