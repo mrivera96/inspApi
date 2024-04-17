@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+
 class Car extends Model
 {
     protected $table = 'Xplore.dbo.tblVehiculos';
@@ -15,7 +17,7 @@ class Car extends Model
         return $this->belongsTo(CarModel::class, 'idModeloVehiculo', 'idModeloVehiculo');
     }
 
-    public function fuel():HasOne
+    public function fuel(): HasOne
     {
         return $this->hasOne(Fuel::class, 'idTipoCombustible', 'idTipoCombustible');
     }

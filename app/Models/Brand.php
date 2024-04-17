@@ -9,6 +9,6 @@ class Brand extends Model
     public $timestamps = false;
 
     public function models(){
-        return $this->hasMany('App\Models\CarModel', 'idMarcaVehiculo', 'idMarcaVehiculo');
+        return $this->hasMany(CarModel::class, 'idMarcaVehiculo', 'idMarcaVehiculo');
     }
 }

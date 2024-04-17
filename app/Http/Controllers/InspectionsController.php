@@ -44,11 +44,12 @@ class InspectionsController extends Controller
 
     public function create(Request $request): JsonResponse
     {
-        $accessories = $request->form['accesorios'];
-        $generalData = $request->form['datosGenerales'];
-        $checkoutData = $request->form['datosSalida'];
-        $sign = $request->form['firma'];
-        $damages = $request->form['danios'];
+        $newInspection = $request->newInspection;
+        $accessories = $newInspection->accessories;
+        $generalData = $newInspection->generalData;
+        $damages = $newInspection->damages;
+        $sign = $newInspection->sign;
+        $additionalComments = $newInspection->additionalComments;
 
         try {
             $newInspection = new Inspection();

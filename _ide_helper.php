@@ -18303,7 +18303,7 @@ namespace Illuminate\Http {
             /**
      *
      *
-     */        class Request {public mixed $busqueda;public mixed $nemVehiculo;
+     */        class Request {public mixed $busqueda;public mixed $nemVehiculo;public mixed $newInspection;
                     /**
          *
          *

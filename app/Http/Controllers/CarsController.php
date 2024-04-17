@@ -14,12 +14,13 @@ class CarsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $cars = Car::with(['model.brand', 'contract'])
-                ->whereHas('contract', function ($q) {
-                    $q->where('idEstado', '=', 9);
-                })->select(['idVehiculo', 'numContrato', 'idCliente', 'nombreCliente', 'numeroContacto', 'idMarca', 'descMarca']);
-            //->select(['idContrato', 'numContrato', 'idCliente', 'nombreCliente', 'numeroContacto', 'idMarca', 'descMarca']);
 
+            $cars = Car::whereHas('contract', function ($q) {
+                $q->where('idEstado', '=', '9');
+            })
+                ->with(['contract:idContrato,idVehiculo,idEstado,idCliente,numContrato','model:idModeloVehiculo,idMarcaVehiculo' , 'model.brand:idMarcaVehiculo,descMarca', 'contract.customer:idCliente,nomCliente,correoI,celularI'])
+                ->select('idVehiculo', 'nemVehiculo', 'numMatricula', 'idModeloVehiculo', 'modelo', 'nemVehiculo','odometro')
+                ->get();
             return response()->json([
                     'error' => 0,
                     'data' => $cars]

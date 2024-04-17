@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DamageType extends Model
 {
-    protected $table = 'Inspecciones.clsTiposDanio';
-    protected $primaryKey = 'idTipoDanio';
     const CREATED_AT = 'fechaCreacion';
     const UPDATED_AT = 'fechaModificacion';
+    protected $table = 'Inspecciones.clsTiposDanio';
+    protected $primaryKey = 'idTipoDanio';
+
 }
