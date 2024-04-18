@@ -19,12 +19,12 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'cars'], function () {
-    Route::group(['middleware' => ['auth:api']], function () {
+    //Route::group(['middleware' => ['auth:api']], function () {
         Route::get('list', [CarsController::class, 'list']);
         Route::get('search', [CarsController::class, 'search']);
         Route::get('details', [CarsController::class, 'getDetails']);
         Route::get('types', [CarsController::class,'getTypes']);
-    });
+    //});
 });
 Route::group(['prefix' => 'agencies'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
@@ -33,12 +33,12 @@ Route::group(['prefix' => 'agencies'], function () {
 });
 
 Route::group(['prefix' => 'inspections'], function () {
-    Route::group(['middleware' => 'auth:api'], function () {
+    //Route::group(['middleware' => 'auth:api'], function () {
         Route::post('add', [InspectionsController::class, 'create']);
         Route::get('list', [InspectionsController::class, 'list']);
         Route::get('details', [InspectionsController::class, 'getById']);
         Route::post('close', [InspectionsController::class, 'close']);
-    });
+   // });
 });
 
 

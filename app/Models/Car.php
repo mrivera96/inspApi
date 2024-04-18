@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Car extends Model
 {
-    protected $table = 'Xplore.dbo.tblVehiculos';
+    protected $table = 'tblVehiculos';
     protected $primaryKey = 'idVehiculo';
     public $timestamps = false;
 
@@ -27,9 +28,9 @@ class Car extends Model
         return $this->belongsTo(Inspection::class, 'idVehiculo', 'idVehiculo');
     }
 
-    public function contract(): BelongsTo
+    public function contract(): HasMany
     {
-        return $this->belongsTo(Contract::class, 'idVehiculo', 'idVehiculo');
+        return $this->hasMany(Contract::class, 'idVehiculo', 'idVehiculo');
     }
 
 }

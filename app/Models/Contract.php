@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Contract extends Model
 {
-    protected $table = 'Xplore.dbo.tblContratos';
+    protected $table = 'tblContratos';
     protected $primaryKey = 'idContrato';
 
-    public function car(): HasOne
+    public function car(): BelongsTo
     {
-        return $this->hasOne(Car::class, 'idVehiculo', 'idVehiculo');
+        return $this->belongsTo(Car::class, 'idVehiculo', 'idVehiculo');
     }
 
     public function customer(): BelongsTo
