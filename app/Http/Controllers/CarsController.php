@@ -16,20 +16,25 @@ class CarsController extends Controller
         try {
 
             $cars = Car::whereHas('contract', function ($q) {
-                $q->where('idEstado', '=', '9');
+                $q->where('tblContratos.idEstado', '=', 9);
             })
-                ->with(['contract:idContrato,idVehiculo,idEstado,idCliente,numContrato','model:idModeloVehiculo,idMarcaVehiculo' , 'model.brand:idMarcaVehiculo,descMarca', 'contract.customer:idCliente,nomCliente,correoI,celularI'])
-                ->select('idVehiculo', 'nemVehiculo', 'numMatricula', 'idModeloVehiculo', 'modelo', 'nemVehiculo','odometro')
+                ->with(['contract:idContrato,idVehiculo,idEstado,idCliente,numContrato', 'model:idModeloVehiculo,idMarcaVehiculo', 'model.brand:idMarcaVehiculo,descMarca', 'contract.customer:idCliente,nomCliente,correoI,celularI'])
+                ->select('idVehiculo', 'nemVehiculo', 'numMatricula', 'idModeloVehiculo', 'modelo', 'nemVehiculo', 'odometro')
                 ->get();
-            return response()->json([
+            return response()->json(
+                [
                     'error' => 0,
-                    'data' => $cars]
+                    'data' => $cars
+                ]
             );
         } catch (Exception $ex) {
-            return response()->json([
-                'error' => 1,
-                'message' => $ex->getMessage()],
-                500);
+            return response()->json(
+                [
+                    'error' => 1,
+                    'message' => $ex->getMessage()
+                ],
+                500
+            );
         }
     }
 
@@ -44,14 +49,16 @@ class CarsController extends Controller
 
             return response()->json([
                 'error' => 0,
-                'data' => $cars]);
-
-
+                'data' => $cars
+            ]);
         } catch (Exception $ex) {
-            return response()->json([
-                'error' => 1,
-                'message' => $ex->getMessage()],
-                500);
+            return response()->json(
+                [
+                    'error' => 1,
+                    'message' => $ex->getMessage()
+                ],
+                500
+            );
         }
     }
 
@@ -73,19 +80,22 @@ class CarsController extends Controller
 
                 return response()->json([
                     'error' => 0,
-                    'data' => $car]);
+                    'data' => $car
+                ]);
             }
 
             return response()->json([
                 'error' => 1,
-                'message' => 'Ya hay una inspección abierta para ese vehículo.']);
-
-
+                'message' => 'Ya hay una inspección abierta para ese vehículo.'
+            ]);
         } catch (Exception $ex) {
-            return response()->json([
-                'error' => 1,
-                'message' => $ex->getMessage()],
-                500);
+            return response()->json(
+                [
+                    'error' => 1,
+                    'message' => $ex->getMessage()
+                ],
+                500
+            );
         }
     }
 
@@ -95,14 +105,16 @@ class CarsController extends Controller
             $carTypes = Rate::all();
             return response()->json([
                 'error' => 0,
-                'data' => $carTypes]);
+                'data' => $carTypes
+            ]);
         } catch (Exception $ex) {
-            return response()->json([
-                'error' => 1,
-                'message' => $ex->getMessage()],
-                500);
+            return response()->json(
+                [
+                    'error' => 1,
+                    'message' => $ex->getMessage()
+                ],
+                500
+            );
         }
-
     }
-
 }

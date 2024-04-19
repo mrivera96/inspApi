@@ -28,9 +28,9 @@ class Car extends Model
         return $this->belongsTo(Inspection::class, 'idVehiculo', 'idVehiculo');
     }
 
-    public function contract(): HasMany
+    public function contract(): HasOne
     {
-        return $this->hasMany(Contract::class, 'idVehiculo', 'idVehiculo');
+        return $this->hasOne(Contract::class, 'idVehiculo', 'idVehiculo');
     }
 
 }
