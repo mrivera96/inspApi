@@ -18,5 +18,8 @@ class DamageType extends Model
     const UPDATED_AT = 'fechaModificacion';
     protected $table = 'Inspecciones.clsTiposDanio';
     protected $primaryKey = 'idTipoDanio';
+    protected $casts = [
+        'idTipoDanio' => 'integer',
+    ];
 
 }

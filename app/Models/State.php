@@ -8,6 +8,9 @@ class State extends Model
     protected $table = 'clsEstados';
     public $timestamps = false;
     protected $primaryKey = 'idEstado';
+    protected $casts = [
+        'idEstado' => 'integer',
+    ];
 
     public function inspection():BelongsTo{
         return $this->belongsTo('App\Models\Inspection', 'idEstado', 'idEstado');

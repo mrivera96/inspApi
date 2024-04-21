@@ -18,7 +18,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car'])->get();
+            $inspections = Inspection::with(['car','state'])->get();
 
             return response()->json(
                 [

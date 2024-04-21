@@ -11,6 +11,9 @@ class Inspection extends Model
     const UPDATED_AT = 'fechaModificacion';
     protected $table = 'Inspecciones.tblInspecciones';
     protected $primaryKey = 'idInspeccion';
+    protected $casts = [
+        'idInspeccion' => 'integer',
+    ];
 
 
     public function car(): HasOne

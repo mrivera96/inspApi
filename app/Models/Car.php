@@ -12,6 +12,9 @@ class Car extends Model
     protected $table = 'tblVehiculos';
     protected $primaryKey = 'idVehiculo';
     public $timestamps = false;
+    protected $casts = [
+        'idVehiculo' => 'integer',
+    ];
 
     public function model(): BelongsTo
     {

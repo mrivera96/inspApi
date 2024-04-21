@@ -10,7 +10,9 @@ class Contract extends Model
 {
     protected $table = 'tblContratos';
     protected $primaryKey = 'idContrato';
-
+    protected $casts = [
+        'idContrato' => 'integer',
+    ];
     public function car(): BelongsTo
     {
         return $this->belongsTo(Car::class, 'idVehiculo', 'idVehiculo');

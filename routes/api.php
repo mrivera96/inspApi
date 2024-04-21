@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccessoriesController;
 use App\Http\Controllers\AgenciesController;
 use App\Http\Controllers\DamagePartsController;
+use App\Http\Controllers\DamagesController;
 use App\Http\Controllers\InspectionsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -59,6 +60,15 @@ Route::group(['prefix' => 'damage-parts'], function () {
     //Route::group(['middleware' => 'auth:api'], function () {
     //Route::post('add', [InspectionsController::class, 'create']);
     Route::get('list', [DamagePartsController::class, 'list']);
+    //Route::get('details', [InspectionsController::class, 'getById']);
+    //Route::post('close', [InspectionsController::class, 'close']);
+    // });
+});
+
+Route::group(['prefix' => 'damage-types'], function () {
+    //Route::group(['middleware' => 'auth:api'], function () {
+    //Route::post('add', [InspectionsController::class, 'create']);
+    Route::get('list', [DamagesController::class, 'listTypes']);
     //Route::get('details', [InspectionsController::class, 'getById']);
     //Route::post('close', [InspectionsController::class, 'close']);
     // });

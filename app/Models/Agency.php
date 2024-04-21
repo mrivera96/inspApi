@@ -10,6 +10,9 @@ class Agency extends Model
     public $timestamps = false;
     protected $primaryKey = 'idAgencia';
     protected $hidden = ['datosRentaWeb'];
+    protected $casts = [
+        'idAgencia' => 'integer',
+    ];
 
     public function contracts(): HasMany
     {

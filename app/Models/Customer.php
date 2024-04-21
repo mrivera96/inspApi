@@ -9,7 +9,9 @@ class Customer extends Model
 {
     protected $table = 'tblClientes';
     protected $primaryKey = 'idCliente';
-
+    protected $casts = [
+        'idCliente' => 'integer',
+    ];
     public function contracts(): HasMany{
         return $this->hasMany(Contract::class, 'idCliente', 'idCliente');
     }

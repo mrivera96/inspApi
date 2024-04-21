@@ -15,6 +15,9 @@ class User extends Authenticatable
     protected $table = 'tblUsuarios';
     protected $primaryKey = 'idUsuario';
     public $timestamps = false;
+    protected $casts = [
+        'idUsuario' => 'integer',
+    ];
 
     protected $fillable = [
         'idPerfil',

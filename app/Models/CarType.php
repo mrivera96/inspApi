@@ -6,4 +6,7 @@ class CarType extends Model
 {
     protected $table = 'clsTipoVehiculo';
     protected $primaryKey = 'idTipoVehiculo';
+    protected $casts = [
+        'idTipoVehiculo' => 'integer',
+    ];
 }

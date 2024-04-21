@@ -9,7 +9,9 @@ class CarModel extends Model
     protected $table = 'Xplore.dbo.clsModelosVehiculos';
     protected $primaryKey = 'idModeloVehiculo';
     public $timestamps = false;
-
+    protected $casts = [
+        'idModeloVehiculo' => 'integer',
+    ];
     public function cars()
     {
         return $this->hasMany(Car::class, 'idModeloVehiculo', 'idModeloVehiculo');

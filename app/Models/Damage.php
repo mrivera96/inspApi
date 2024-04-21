@@ -18,5 +18,8 @@ class Damage extends Model
     const UPDATED_AT = 'fechaModificacion';
     protected $table = 'Inspecciones.tblDaniosInspeccion';
     protected $primaryKey = 'idDanio';
+    protected $casts = [
+        'idDanio' => 'integer',
+    ];
 
 }
