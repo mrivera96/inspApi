@@ -17,6 +17,7 @@ class User extends Authenticatable
     public $timestamps = false;
     protected $casts = [
         'idUsuario' => 'integer',
+        'idPerfil' => 'integer',
     ];
 
     protected $fillable = [
