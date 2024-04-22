@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://inspecciones.test','https://localhost','*'],
+    'allowed_origins' => ['http://inspecciones.test','https://localhost','http://localhost','*'],
 
     'allowed_origins_patterns' => [],
 
