@@ -39,11 +39,13 @@ class AuthController extends Controller
                     $result->nomUsuario = $user->nomUsuario;
                     $result->lastLogin = $user->lastLogin;
 
-
+                    $res = new \stdClass();
+                    $res->user = $result;
                     return response()->json(
                         [
                             'error' => 0,
-                            'user' => $result,
+                            'data' => $res
+                            ,
                         ],
                         200
                     );
