@@ -12,7 +12,13 @@ class Contract extends Model
     protected $primaryKey = 'idContrato';
     protected $casts = [
         'idContrato' => 'integer',
+        'idVehiculo' => 'integer',
+        'idCliente' => 'integer',
+        'idAgenciaSalida' => 'integer',
+        'idAgenciaEntrega' => 'integer',
+
     ];
+
     public function car(): BelongsTo
     {
         return $this->belongsTo(Car::class, 'idVehiculo', 'idVehiculo');
@@ -30,7 +36,7 @@ class Contract extends Model
 
     public function checkOutAgency(): BelongsTo
     {
-        return $this->belongsTo(Agency::class, 'idAgencia', 'idAgenciaSalida');
+        return $this->belongsTo(Agency::class, 'idAgencia','idAgenciaSalida');
     }
 
     public function checkInAgency(): BelongsTo

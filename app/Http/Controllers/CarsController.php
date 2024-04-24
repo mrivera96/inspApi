@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\Contract;
 use App\Models\Rate;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -15,16 +16,18 @@ class CarsController extends Controller
     {
         try {
 
-            $cars = Car::whereHas('contract', function ($q) {
-                $q->where('tblContratos.idEstado', '=', 9);
-            })
-                ->with(['contract:idContrato,idVehiculo,idEstado,idCliente,numContrato', 'model:idModeloVehiculo,idMarcaVehiculo', 'model.brand:idMarcaVehiculo,descMarca', 'contract.customer:idCliente,nomCliente,correoI,celularI'])
-                ->select('idVehiculo', 'nemVehiculo', 'numMatricula', 'idModeloVehiculo', 'modelo', 'nemVehiculo', 'odometro')
-                ->get();
+            $contracts = Contract::with(
+                [   
+                    'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro', 
+                    'car.model:idModeloVehiculo,idMarcaVehiculo', 'car.model.brand:idMarcaVehiculo,descMarca', 
+                    'customer:idCliente,nomCliente,correoI,celularI'
+                ]
+            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato')->get();
+
             return response()->json(
                 [
                     'error' => 0,
-                    'data' => $cars
+                    'data' => $contracts
                 ]
             );
         } catch (Exception $ex) {
