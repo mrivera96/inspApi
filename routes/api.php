@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccessoriesController;
 use App\Http\Controllers\AgenciesController;
+use App\Http\Controllers\ContractsController;
 use App\Http\Controllers\DamagePartsController;
 use App\Http\Controllers\DamagesController;
 use App\Http\Controllers\InspectionsController;
@@ -31,10 +32,10 @@ Route::group(['prefix' => 'cars'], function () {
 
 Route::group(['prefix' => 'contracts'], function () {
     //Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('list', [CarsController::class, 'list']);
-    Route::get('search', [CarsController::class, 'search']);
-    Route::get('details', [CarsController::class, 'getDetails']);
-    Route::get('types', [CarsController::class, 'getTypes']);
+    Route::get('list', [ContractsController::class, 'list']);
+    Route::get('search', [ContractsController::class, 'search']);
+    Route::get('details', [ContractsController::class, 'getDetails']);
+    Route::get('types', [ContractsController::class, 'getTypes']);
     //});
 });
 
@@ -45,12 +46,12 @@ Route::group(['prefix' => 'agencies'], function () {
 });
 
 Route::group(['prefix' => 'inspections'], function () {
-    //Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('add', [InspectionsController::class, 'create']);
-    Route::get('list', [InspectionsController::class, 'list']);
-    Route::get('details', [InspectionsController::class, 'getById']);
-    Route::post('close', [InspectionsController::class, 'close']);
-    // });
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('add', [InspectionsController::class, 'create']);
+        Route::get('list', [InspectionsController::class, 'list']);
+        Route::get('details', [InspectionsController::class, 'getById']);
+        Route::post('close', [InspectionsController::class, 'close']);
+    });
 });
 
 

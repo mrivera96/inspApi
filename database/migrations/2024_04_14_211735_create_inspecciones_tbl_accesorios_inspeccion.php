@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('idInspeccion')->nullable(false);
             $table->unsignedInteger('idAccesorio')->nullable(false);
             $table->integer('cantidad')->nullable();
+            $table->string('etapa')->nullable();
             $table->timestamps();
         });
 

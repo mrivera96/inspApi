@@ -14,6 +14,7 @@ class Car extends Model
     public $timestamps = false;
     protected $casts = [
         'idVehiculo' => 'integer',
+        'odometro' => 'integer'
     ];
 
     public function model(): BelongsTo

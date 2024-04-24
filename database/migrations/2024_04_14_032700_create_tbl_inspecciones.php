@@ -16,18 +16,18 @@ return new class extends Migration {
             $table->unsignedInteger('idCliente')->nullable(false);
             $table->unsignedInteger('idVehiculo')->nullable(false);
             $table->unsignedInteger('idAgenciaSalida')->nullable(false);
-            $table->integer('combSalida')->nullable(false);
-            $table->integer('rendCombSalida')->nullable(false);
+            $table->string('combSalida')->nullable(false);
+            $table->integer('rendCombSalida')->nullable();
             $table->integer('odoSalida')->nullable(false);
             $table->datetime('fechaSalida')->nullable(false);
             $table->integer('idUsuarioSalida')->nullable(false);
-            $table->string('firmaClienteSalida', length: 80)->nullable(false);
+            $table->string('firmaClienteSalida', length: 80)->nullable();
             $table->unsignedInteger('idAgenciaEntrega')->nullable();
-            $table->integer('combEntrega')->nullable();
+            $table->string('combEntrega')->nullable();
             $table->integer('rendCombEntrega')->nullable();
             $table->integer('odoEntrega')->nullable();
             $table->dateTime('fechaEntrega')->nullable();
-            $table->unsignedInteger('idUsuarioEntrega');
+            $table->unsignedInteger('idUsuarioEntrega')->nullable();
             $table->string('firmaClienteEntrega', length: 80)->nullable();
             $table->string('nomRecibeVehiculo', length: 100)->nullable(false);
             $table->string('nomEntregaVehiculo', length: 100)->nullable();
@@ -35,6 +35,9 @@ return new class extends Migration {
             $table->unsignedInteger('usuarioCreacion')->nullable();
             $table->unsignedInteger('usuarioModificacion')->nullable();
             $table->string('fotoLicencia')->nullable();
+            $table->string('comentariosLlantasDelanteras')->nullable();
+            $table->string('comentariosLlantasTraseras')->nullable();
+            $table->string('comentariosBateria')->nullable();
             $table->timestamps();
         });
 

@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Inspection extends Model
 {
-    const CREATED_AT = 'fechaCreacion';
-    const UPDATED_AT = 'fechaModificacion';
+
     protected $table = 'Inspecciones.tblInspecciones';
     protected $primaryKey = 'idInspeccion';
     protected $casts = [
@@ -29,6 +28,11 @@ class Inspection extends Model
     public function state(): HasOne
     {
         return $this->hasOne(State::class, 'idEstado', 'idEstado');
+    }
+
+    public function contract(): HasOne
+    {
+        return $this->hasOne(Contract::class, 'idContrato', 'idContrato');
     }
 
 

@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Car;
+use App\Models\Damage;
 use App\Models\Inspection;
+use App\Models\InspectionAccesories;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isNull;
 
 
 class InspectionsController extends Controller
@@ -18,7 +22,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car','state'])->get();
+            $inspections = Inspection::with(['car', 'state', 'contract.customer'])->get();
 
             return response()->json(
                 [
@@ -44,53 +48,80 @@ class InspectionsController extends Controller
 
     public function create(Request $request): JsonResponse
     {
-        $newInspection = $request->newInspection;
-        $accessories = $newInspection->accessories;
-        $generalData = $newInspection->generalData;
-        $damages = $newInspection->damages;
-        $sign = $newInspection->sign;
-        $additionalComments = $newInspection->additionalComments;
+
+        $newInspection = new Inspection();
+        $newInspection->idVehiculo = $request->idVehiculo;
+        $newInspection->idContrato = $request->idContrato;
+        $newInspection->idCliente = $request->idCliente;
+        $newInspection->nomRecibeVehiculo = $request->nomRecibeVehiculo;
+        $newInspection->idAgenciaSalida = $request->idAgenciaSalida;
+        $newInspection->odoSalida = $request->odoSalida;
+        $newInspection->combSalida = $request->combSalida;
+        $newInspection->comentariosLlantasDelanteras = $request->comentariosLlantasDelanteras;
+        $newInspection->comentariosLlantasTraseras = $request->comentariosLlantasTraseras;
+        $newInspection->comentariosBateria = $request->comentariosBateria;
+        $newInspection->fechaSalida = new Carbon($request->fechaSalida);
+        $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
+        $newInspection->idEstado = 48;
+
+
+        $damagesCheckout = $request->daniosSalida;
+        $accessoriesCheckout = $request->accesoriosSalida;
 
         try {
-            $newInspection = new Inspection();
-            $id = Car::where('nemVehiculo', $generalData['nVehiculo'])->get()->first();
-            $newInspection->idVehiculo = $id->idVehiculo;
-            $newInspection->idAgenciaSalida = $checkoutData['idAgenciaSalida'];
-            $newInspection->combSalida = $checkoutData['combSalida'];
-            $newInspection->rendCombSalida = $checkoutData['rendCombSalida'];
-            $newInspection->odoSalida = $checkoutData['odoSalida'];
-            $date = date('Y-m-d', strtotime($checkoutData['fechaSalida']));
-            $time = $checkoutData['horaSalida'];
-            $datetime = $date . ' ' . $time;
-            $newInspection->fechaSalida = new Carbon($datetime);
-            $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
+            $newInspection->save();
+            $newInspection->firmaClienteSalida = $request->firmaClienteSalida;
 
-            if ($sign['firmaClienteSalida']) {
-                $image = str_replace('data:image/png;base64,', '', $sign['firmaClienteSalida']);
+            if ($newInspection->firmaClienteSalida) {
+                $image = str_replace('data:image/png;base64,', '', $newInspection->firmaClienteSalida);
                 $image = str_replace(' ', '+', $image);
                 $imageName = Str::random(15) . time() . '.png';
-                \File::put(public_path() . '/img/firmas/' . $imageName, base64_decode($image));
-                $newInspection->firmaClienteSalida = '/img/firmas/' . $imageName;
+                $path = "img/" . $newInspection->idInspeccion . "/firmas/salida/";
+                if (!\File::exists($path)) {
+                    \File::makeDirectory($path, 0777, true);
+                }
+                \File::put($path . $imageName, base64_decode($image));
+                $newInspection->firmaClienteSalida = '/img/' . $newInspection->idInspeccion . '/firmas/salida/' . $imageName;
+                $newInspection->save();
             }
 
-            if ($damages != null) {
-                $imageDamages = str_replace('data:image/png;base64,', '', $damages);
-                $imageDamages = str_replace(' ', '+', $imageDamages);
-                $imageDamageName = Str::random(15) . time() . '.png';
-                \File::put(public_path() . '/img/danios/' . $imageDamageName, base64_decode($imageDamages));
-                $newInspection->daniosSalida = '/img/danios/' . $imageDamageName;
+
+            if ($accessoriesCheckout != null) {
+                foreach ($accessoriesCheckout as $accessory) {
+                    $newInspectionAccessory = new InspectionAccesories();
+                    $newInspectionAccessory->idInspeccion = $newInspection->idInspeccion;
+                    $newInspectionAccessory->idAccesorio = $accessory['idAccesorio'];
+                    $newInspectionAccessory->etapa = "checkout";
+                    $newInspectionAccessory->save();
+                }
             }
 
-            $newInspection->nomRecibeVehiculo = $sign['nomRecibeVehiculo'];
-            $newInspection->idEstado = 48;
-            $newInspection->fechaProceso = Carbon::now('America/Tegucigalpa');
+            if ($damagesCheckout != null) {
+                foreach ($damagesCheckout as $damage) {
+                    $imageDamages = str_replace('data:image/png;base64,', '', $damage['foto']);
+                    $imageDamages = str_replace(' ', '+', $imageDamages);
+                    $imageDamageName = Str::random(15) . time() . '.png';
+                    $path = "img/" . $newInspection->idInspeccion . "/daniosSalida/";
+                    if (!\File::exists($path)) {
+                        \File::makeDirectory($path, 0777, true);
+                    }
+                    \File::put($path . $imageName, base64_decode($image));
 
-            $newInspection->save();
-            InspectionAccessoriesController::insertarAccesorio($accessories, $newInspection->idInspeccion);
+                    $newDamage = new Damage();
+                    $newDamage->idInspeccion = $newInspection->idInspeccion;
+                    $newDamage->idPieza = $damage['idPieza'];
+                    $newDamage->idTipoDanio = $damage['idTipoDanio'];
+                    $newDamage->etapa = "checkout";
+                    $newDamage->usuarioCreacion = Auth::user()->idUsuario;
+                    $newDamage->fotos = '/img/' . $newInspection->idInspeccion . '/daniosSalida/' . $imageDamageName;
+                    $newDamage->save();
+                }
+            }
+
 
             return response()->json([
                 'error' => 0,
-                'data' => $newInspection->idInspeccion
+                'data' => $newInspection
             ]);
         } catch (Exception $ex) {
             return response()->json([
@@ -104,7 +135,7 @@ class InspectionsController extends Controller
     public function getById(Request $request): JsonResponse
     {
         try {
-            $inspection = Inspection::with(['estado','car.model.brand','checkOutAgency'])
+            $inspection = Inspection::with(['estado', 'car.model.brand', 'checkOutAgency'])
                 ->where('idInspeccion', $request->idInspeccion)
                 ->get()
                 ->first();

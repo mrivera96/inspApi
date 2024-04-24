@@ -15,13 +15,13 @@ class Agency extends Model
         'idAgencia' => 'integer',
     ];
 
-    public function checkoutContracts(): HasMany
+    public function checkoutContracts(): BelongsTo
     {
-        return $this->hasMany(Contract::class, 'idAgenciaSalida', 'idAgencia');
+        return $this->belongsTo(Contract::class, 'idAgencia', 'idAgenciaSalida');
     }
 
-    public function checkinContracts(): HasMany
+    public function checkinContracts(): BelongsTo
     {
-        return $this->hasMany(Contract::class, 'idAgenciaEntrega', 'idAgencia');
+        return $this->belongsTo(Contract::class, 'idAgencia', 'idAgenciaEntrega');
     }
 }

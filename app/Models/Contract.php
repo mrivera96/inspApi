@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Contract extends Model
@@ -34,14 +35,14 @@ class Contract extends Model
         return $this->hasOne(State::class, 'idEstado', 'idEstado');
     }
 
-    public function checkOutAgency(): BelongsTo
+    public function checkOutAgency(): HasOne
     {
-        return $this->belongsTo(Agency::class, 'idAgencia','idAgenciaSalida');
+        return $this->hasOne(Agency::class,'idAgencia','idAgenciaSalida');
     }
 
-    public function checkInAgency(): BelongsTo
+    public function checkInAgency(): HasOne
     {
-        return $this->belongsTo(Agency::class, 'idAgencia', 'idAgenciaEntrega');
+        return $this->hasOne(Agency::class,'idAgencia', 'idAgenciaEntrega');
     }
 
     public function checkOutFuelTank(): HasOne
@@ -52,5 +53,10 @@ class Contract extends Model
     public function checkInFuelTank(): HasOne
     {
         return $this->hasOne(FuelTank::class, 'idTanque', 'idTanqueEnt');
+    }
+
+    public function inspection(): BelongsTo
+    {
+        return $this->belongsTo(Inspection::class, 'idContrato', 'idContrato');
     }
 }

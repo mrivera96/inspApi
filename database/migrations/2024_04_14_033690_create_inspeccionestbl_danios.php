@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('idPieza')->nullable(false);
             $table->unsignedBigInteger('idTipoDanio')->nullable(false);
             $table->text('fotos')->nullable();
+            $table->string('etapa')->nullable();
             $table->unsignedInteger('usuarioCreacion')->nullable();
             $table->unsignedInteger('usuarioModificacion')->nullable();
             $table->timestamps();
@@ -37,8 +38,8 @@ return new class extends Migration {
     {
         Schema::table('Inspecciones.tblDaniosInspeccion', function (Blueprint $table) {
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idInspeccion_foreign');
-            $table->dropForeign( 'Inspecciones_tblDaniosInspeccion_idPieza_foreign');
-            $table->dropForeign( 'Inspecciones_tblDaniosInspeccion_idTipoDanio_foreign');
+            $table->dropForeign('Inspecciones_tblDaniosInspeccion_idPieza_foreign');
+            $table->dropForeign('Inspecciones_tblDaniosInspeccion_idTipoDanio_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_usuarioCreacion_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_usuarioModificacion_foreign');
         });
