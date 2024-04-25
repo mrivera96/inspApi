@@ -105,7 +105,7 @@ class InspectionsController extends Controller
                     if (!\File::exists($path)) {
                         \File::makeDirectory($path, 0777, true);
                     }
-                    \File::put($path . $imageName, base64_decode($image));
+                    \File::put($path . $imageDamageName, base64_decode($imageDamages));
 
                     $newDamage = new Damage();
                     $newDamage->idInspeccion = $newInspection->idInspeccion;
@@ -118,10 +118,11 @@ class InspectionsController extends Controller
                 }
             }
 
+            $savedInspection = Inspection::with(['car', 'state', 'contract.customer'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
-                'data' => $newInspection
+                'data' => $savedInspection
             ]);
         } catch (Exception $ex) {
             return response()->json([
