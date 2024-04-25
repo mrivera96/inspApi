@@ -31,12 +31,12 @@ Route::group(['prefix' => 'cars'], function () {
 });
 
 Route::group(['prefix' => 'contracts'], function () {
-    //Route::group(['middleware' => ['auth:api']], function () {
+    Route::group(['middleware' => ['auth:api']], function () {
     Route::get('list', [ContractsController::class, 'list']);
     Route::get('search', [ContractsController::class, 'search']);
     Route::get('details', [ContractsController::class, 'getDetails']);
     Route::get('types', [ContractsController::class, 'getTypes']);
-    //});
+    });
 });
 
 Route::group(['prefix' => 'agencies'], function () {
