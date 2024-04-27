@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Contract;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ContractsController extends Controller
 {
@@ -20,6 +19,7 @@ class ContractsController extends Controller
                     'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro,idEstado',
                     'car.model:idModeloVehiculo,idMarcaVehiculo', 'car.model.brand:idMarcaVehiculo,descMarca',
                     'customer:idCliente,nomCliente,correoI,celularI',
+                    'inspection'
 
                 ]
             )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato','idAgenciaSalida','idAgenciaEntrega')->get();

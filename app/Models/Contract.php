@@ -17,6 +17,7 @@ class Contract extends Model
         'idCliente' => 'integer',
         'idAgenciaSalida' => 'integer',
         'idAgenciaEntrega' => 'integer',
+        'idEstado'=> 'integer'
 
     ];
 
