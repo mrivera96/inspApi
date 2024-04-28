@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Inspection extends Model
@@ -35,5 +36,12 @@ class Inspection extends Model
         return $this->hasOne(Contract::class, 'idContrato', 'idContrato');
     }
 
-
+    public function checkoutAccessories(): HasManyThrough
+    {
+        return $this->hasManyThrough(Accessory::class, InspectionAccesories::class, 'idInspeccion', 'idAccesorio', 'idInspeccion', 'idAccesorio')->where('etapa','checkout');
+    }
+    public function checkinAccessories(): HasManyThrough
+    {
+        return $this->hasManyThrough(Accessory::class, InspectionAccesories::class, 'idInspeccion', 'idAccesorio', 'idInspeccion', 'idAccesorio')->where('etapa','checkin');
+    }
 }

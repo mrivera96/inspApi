@@ -22,7 +22,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car', 'state', 'contract.customer'])->get();
+            $inspections = Inspection::with(['car', 'state', 'contract.customer','checkoutAccessories','checkinAccessories'])->get();
 
             return response()->json(
                 [
@@ -65,6 +65,7 @@ class InspectionsController extends Controller
         $newInspection->idEstado = 48;
 
 
+
         $damagesCheckout = $request->daniosSalida;
         $accessoriesCheckout = $request->accesoriosSalida;
 
@@ -82,6 +83,20 @@ class InspectionsController extends Controller
                 }
                 \File::put($path . $imageName, base64_decode($image));
                 $newInspection->firmaClienteSalida = '/img/' . $newInspection->idInspeccion . '/firmas/salida/' . $imageName;
+                $newInspection->save();
+            }
+
+            $newInspection->fotoLicencia = $request->fotoLicencia;
+            if ($newInspection->fotoLicencia) {
+                $documentImage = str_replace('data:image/png;base64,', '', $newInspection->fotoLicencia);
+                $documentImage = str_replace(' ', '+', $documentImage);
+                $imageName = Str::random(15) . time() . '.png';
+                $path = "img/" . $newInspection->idInspeccion . "/licencia/";
+                if (!\File::exists($path)) {
+                    \File::makeDirectory($path, 0777, true);
+                }
+                \File::put($path . $imageName, base64_decode($documentImage));
+                $newInspection->fotoLicencia = '/img/' . $newInspection->idInspeccion . '/licencia/' . $imageName;
                 $newInspection->save();
             }
 
