@@ -20,4 +20,11 @@ class Damage extends Model
         'idDanio' => 'integer',
     ];
 
+    public function damageType(){
+        return $this->hasOne(DamageType::class,'idTipoDanio');
+    }
+
+    public function damagePart(){
+        return $this->hasOne(DamagePart::class,'idPieza');
+    }
 }

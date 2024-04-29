@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -25,6 +26,10 @@ class Inspection extends Model
     {
         return $this->hasOne(Agency::class, 'idAgencia', 'idAgenciaSalida');
     }
+    public function checkInAgency(): HasOne
+    {
+        return $this->hasOne(Agency::class, 'idAgencia', 'idAgenciaSalida');
+    }
 
     public function state(): HasOne
     {
@@ -43,5 +48,23 @@ class Inspection extends Model
     public function checkinAccessories(): HasManyThrough
     {
         return $this->hasManyThrough(Accessory::class, InspectionAccesories::class, 'idInspeccion', 'idAccesorio', 'idInspeccion', 'idAccesorio')->where('etapa','checkin');
+    }
+
+    public function checkOutAgent(): HasOne
+    {
+        return $this->hasOne(User::class, 'idUsuario', 'idUsuarioSalida');
+    }
+    public function checkInAgent(): HasOne
+    {
+        return $this->hasOne(User::class, 'idUsuario', 'idUsuarioEntrega');
+    }
+
+    public function checkoutDamages(): HasMany
+    {
+        return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkout');
+    }
+    public function checkinDamages(): HasMany
+    {
+        return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkin');
     }
 }

@@ -22,7 +22,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car', 'state', 'contract.customer','checkoutAccessories','checkinAccessories'])->get();
+            $inspections = Inspection::with(['car','car.model','car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent','checkoutDamages','checkoutDamages.damageType','checkoutDamages.damagePart','checkinDamages','checkinDamages.damageType','checkinDamages.damagePart'])->get();
 
             return response()->json(
                 [
@@ -63,7 +63,6 @@ class InspectionsController extends Controller
         $newInspection->fechaSalida = new Carbon($request->fechaSalida);
         $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
         $newInspection->idEstado = 48;
-
 
 
         $damagesCheckout = $request->daniosSalida;
@@ -133,7 +132,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'state', 'contract.customer'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car','car.model','car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent','checkoutDamages','checkoutDamages.damageType','checkoutDamages.damagePart','checkinDamages','checkinDamages.damageType','checkinDamages.damagePart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
@@ -214,7 +213,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'state', 'contract.customer'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car','car.model','car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent','checkoutDamages','checkoutDamages.damageType','checkoutDamages.damagePart','checkinDamages','checkinDamages.damageType','checkinDamages.damagePart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
