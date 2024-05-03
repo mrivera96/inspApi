@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DamagePart;
+use App\Models\AutoPart;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
@@ -12,7 +12,7 @@ class DamagePartsController extends Controller
     {
         try {
 
-            $damageTypes = DamagePart::all();
+            $damageTypes = AutoPart::all();
             return response()->json(
                 [
                     'error' => 0,

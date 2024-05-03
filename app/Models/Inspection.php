@@ -67,4 +67,9 @@ class Inspection extends Model
     {
         return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkin');
     }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(InspectionPhoto::class, 'idInspeccion', 'idInspeccion');
+    }
 }

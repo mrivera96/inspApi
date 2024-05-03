@@ -7,6 +7,7 @@ use App\Models\Car;
 use App\Models\Damage;
 use App\Models\Inspection;
 use App\Models\InspectionAccesories;
+use App\Models\InspectionPhoto;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car','car.model','car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent','checkoutDamages','checkoutDamages.damageType','checkoutDamages.damagePart','checkinDamages','checkinDamages.damageType','checkinDamages.damagePart'])->get();
+            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart'])->get();
 
             return response()->json(
                 [
@@ -65,7 +66,7 @@ class InspectionsController extends Controller
         $newInspection->idEstado = 48;
 
 
-        $damagesCheckout = $request->daniosSalida;
+        $checkoutPhotos = $request->photos;
         $accessoriesCheckout = $request->accesoriosSalida;
 
         try {
@@ -110,29 +111,28 @@ class InspectionsController extends Controller
                 }
             }
 
-            if ($damagesCheckout != null) {
-                foreach ($damagesCheckout as $damage) {
-                    $imageDamages = str_replace('data:image/png;base64,', '', $damage['foto']);
-                    $imageDamages = str_replace(' ', '+', $imageDamages);
-                    $imageDamageName = Str::random(15) . time() . '.png';
-                    $path = "img/" . $newInspection->idInspeccion . "/daniosSalida/";
+            if ($checkoutPhotos != null) {
+                foreach ($checkoutPhotos as $photo) {
+                    $image = str_replace('data:image/png;base64,', '', $photo['foto']);
+                    $image = str_replace(' ', '+', $image);
+                    $imageName = Str::random(15) . time() . '.png';
+                    $path = "img/" . $newInspection->idInspeccion . "/fotosSalida/";
                     if (!\File::exists($path)) {
                         \File::makeDirectory($path, 0777, true);
                     }
-                    \File::put($path . $imageDamageName, base64_decode($imageDamages));
+                    \File::put($path . $imageName, base64_decode($image));
 
-                    $newDamage = new Damage();
-                    $newDamage->idInspeccion = $newInspection->idInspeccion;
-                    $newDamage->idPieza = $damage['idPieza'];
-                    $newDamage->idTipoDanio = $damage['idTipoDanio'];
-                    $newDamage->etapa = "checkout";
-                    $newDamage->usuarioCreacion = Auth::user()->idUsuario;
-                    $newDamage->fotos = '/img/' . $newInspection->idInspeccion . '/daniosSalida/' . $imageDamageName;
-                    $newDamage->save();
+                    $newPhoto = new InspectionPhoto();
+                    $newPhoto->idInspeccion = $newInspection->idInspeccion;
+                    $newPhoto->idPieza = $photo['idPieza'];
+                    $newPhoto->etapa = $photo['etapa'];
+                    $newPhoto->usuarioCreacion = Auth::user()->idUsuario;
+                    $newPhoto->foto = '/img/' . $newInspection->idInspeccion . '/fotosSalida/' . $imageName;
+                    $newPhoto->save();
                 }
             }
 
-            $savedInspection = Inspection::with(['car','car.model','car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent','checkoutDamages','checkoutDamages.damageType','checkoutDamages.damagePart','checkinDamages','checkinDamages.damageType','checkinDamages.damagePart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
@@ -213,7 +213,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car','car.model','car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent','checkoutDamages','checkoutDamages.damageType','checkoutDamages.damagePart','checkinDamages','checkinDamages.damageType','checkinDamages.damagePart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('idInspeccion')->nullable(false);
             $table->unsignedBigInteger('idPieza')->nullable(false);
             $table->unsignedBigInteger('idTipoDanio')->nullable(false);
-            $table->text('fotos')->nullable();
+            $table->unsignedBigInteger('idFoto')->nullable();
             $table->string('etapa')->nullable();
             $table->unsignedInteger('usuarioCreacion')->nullable();
             $table->unsignedInteger('usuarioModificacion')->nullable();
@@ -24,8 +24,9 @@ return new class extends Migration {
 
         Schema::table('Inspecciones.tblDaniosInspeccion', function (Blueprint $table) {
             $table->foreign('idInspeccion')->references('idInspeccion')->on('Inspecciones.tblInspecciones');
-            $table->foreign('idPieza')->references('idPieza')->on('Inspecciones.clsPiezasDanio');
+            $table->foreign('idPieza')->references('idPieza')->on('Inspecciones.clsPiezasVehiculo');
             $table->foreign('idTipoDanio')->references('idTipoDanio')->on('Inspecciones.clsTiposDanio');
+            $table->foreign('idFoto')->references('idFoto')->on('Inspecciones.tblFotosInspeccion');
             $table->foreign('usuarioCreacion')->references('idUsuario')->on('tblUsuarios');
             $table->foreign('usuarioModificacion')->references('idUsuario')->on('tblUsuarios');
         });
@@ -40,6 +41,7 @@ return new class extends Migration {
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idInspeccion_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idPieza_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idTipoDanio_foreign');
+            $table->dropForeign('Inspecciones_tblFotosInspeccion_idFoto_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_usuarioCreacion_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_usuarioModificacion_foreign');
         });

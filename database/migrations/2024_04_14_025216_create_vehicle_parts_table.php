@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('Inspecciones.clsPiezasDanio', function (Blueprint $table) {
+        Schema::create('Inspecciones.clsPiezasVehiculo', function (Blueprint $table) {
             $table->id('idPieza')->primary();
             $table->string('descPieza', length: 150)->nullable(false);
             $table->boolean('isActivo')->default(true);
@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->integer('orden')->nullable();
         });
 
-        Schema::table('Inspecciones.clsPiezasDanio', function (Blueprint $table) {
+        Schema::table('Inspecciones.clsPiezasVehiculo', function (Blueprint $table) {
             $table->foreign('usuarioCreacion')->references('idUsuario')->on('tblUsuarios');
             $table->foreign('usuarioModificacion')->references('idUsuario')->on('tblUsuarios');
         });
@@ -31,10 +31,10 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('Inspecciones.clsPiezasDanio', function (Blueprint $table) {
-            $table->dropForeign('Inspecciones_clsPiezasDanio_usuarioCreacion_foreign');
-            $table->dropForeign('Inspecciones_clsPiezasDanio_usuarioModificacion_foreign');
+        Schema::table('Inspecciones.clsPiezasVehiculo', function (Blueprint $table) {
+            $table->dropForeign('Inspecciones_clsPiezasVehiculo_usuarioCreacion_foreign');
+            $table->dropForeign('Inspecciones_clsPiezasVehiculo_usuarioModificacion_foreign');
         });
-        Schema::dropIfExists('Inspecciones.clsPiezasDanio');
+        Schema::dropIfExists('Inspecciones.clsPiezasVehiculo');
     }
 };

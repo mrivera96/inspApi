@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DamagePart;
+use App\Models\AutoPart;
 use Illuminate\Http\Request;
 
 class VehiclePartsController extends Controller
@@ -34,7 +34,7 @@ class VehiclePartsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DamagePart $vehicleParts)
+    public function show(AutoPart $vehicleParts)
     {
         //
     }
@@ -42,7 +42,7 @@ class VehiclePartsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DamagePart $vehicleParts)
+    public function edit(AutoPart $vehicleParts)
     {
         //
     }
@@ -50,7 +50,7 @@ class VehiclePartsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DamagePart $vehicleParts)
+    public function update(Request $request, AutoPart $vehicleParts)
     {
         //
     }
@@ -58,7 +58,7 @@ class VehiclePartsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DamagePart $vehicleParts)
+    public function destroy(AutoPart $vehicleParts)
     {
         //
     }

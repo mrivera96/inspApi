@@ -25,6 +25,6 @@ class Damage extends Model
     }
 
     public function damagePart(){
-        return $this->hasOne(DamagePart::class,'idPieza');
+        return $this->hasOne(AutoPart::class,'idPieza');
     }
 }
