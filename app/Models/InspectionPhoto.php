@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class InspectionPhoto extends Model
 {
@@ -11,7 +12,13 @@ class InspectionPhoto extends Model
 
     protected $table = 'Inspecciones.tblFotosInspeccion';
 
-    public function autoPart(){
-        return $this->hasOne(AutoPart::class,'idPieza');
+    protected $casts = [
+        'idPieza' => 'integer',
+        'idFoto' => 'integer',
+        'idInspeccion' => 'integer',
+    ];
+
+    public function autoPart():HasOne{
+        return $this->hasOne(AutoPart::class,'idPieza','idPieza');
     }
 }
