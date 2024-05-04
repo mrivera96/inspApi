@@ -22,3 +22,4 @@ class InspectionPhoto extends Model
         return $this->hasOne(AutoPart::class,'idPieza','idPieza');
     }
 }
+

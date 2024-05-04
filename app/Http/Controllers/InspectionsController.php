@@ -161,7 +161,7 @@ class InspectionsController extends Controller
         $newInspection->idEstado = 49;
 
 
-        $damagesCheckin = $request->daniosEntrega;
+        $checkinPhotos = $request->photos;
         $accessoriesCheckin = $request->accesoriosEntrega;
 
         try {
@@ -191,25 +191,26 @@ class InspectionsController extends Controller
                 }
             }
 
-            if ($damagesCheckin != null) {
-                foreach ($damagesCheckin as $damage) {
-                    $imageDamages = str_replace('data:image/png;base64,', '', $damage['foto']);
-                    $imageDamages = str_replace(' ', '+', $imageDamages);
-                    $imageDamageName = Str::random(15) . time() . '.png';
-                    $path = "img/" . $newInspection->idInspeccion . "/daniosEntrega/";
-                    if (!\File::exists($path)) {
-                        \File::makeDirectory($path, 0777, true);
-                    }
-                    \File::put($path . $imageDamageName, base64_decode($imageDamages));
+            if ($checkinPhotos != null) {
+                foreach ($checkinPhotos as $photo) {
+                    if(Str::length($photo['foto']) > 100){
+                        $image = str_replace('data:image/png;base64,', '', $photo['foto']);
+                        $image = str_replace(' ', '+', $image);
+                        $imageName = Str::random(15) . time() . '.png';
+                        $path = "img/" . $newInspection->idInspeccion . "/fotosEntrada/";
+                        if (!\File::exists($path)) {
+                            \File::makeDirectory($path, 0777, true);
+                        }
+                        \File::put($path . $imageName, base64_decode($image));
 
-                    $newDamage = new Damage();
-                    $newDamage->idInspeccion = $newInspection->idInspeccion;
-                    $newDamage->idPieza = $damage['idPieza'];
-                    $newDamage->idTipoDanio = $damage['idTipoDanio'];
-                    $newDamage->etapa = "checkin";
-                    $newDamage->usuarioCreacion = Auth::user()->idUsuario;
-                    $newDamage->fotos = '/img/' . $newInspection->idInspeccion . '/daniosEntrega/' . $imageDamageName;
-                    $newDamage->save();
+                        $newPhoto = new InspectionPhoto();
+                        $newPhoto->idInspeccion = $newInspection->idInspeccion;
+                        $newPhoto->idPieza = $photo['idPieza'];
+                        $newPhoto->etapa = 'checkin';
+                        $newPhoto->usuarioCreacion = Auth::user()->idUsuario;
+                        $newPhoto->foto = '/img/' . $newInspection->idInspeccion . '/fotosEntrada/' . $imageName;
+                        $newPhoto->save();
+                    }
                 }
             }
 
