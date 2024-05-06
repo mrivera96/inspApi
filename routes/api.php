@@ -5,6 +5,7 @@ use App\Http\Controllers\AgenciesController;
 use App\Http\Controllers\ContractsController;
 use App\Http\Controllers\DamagePartsController;
 use App\Http\Controllers\DamagesController;
+use App\Http\Controllers\FuelTanksController;
 use App\Http\Controllers\InspectionsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -67,13 +68,22 @@ Route::group(['prefix' => 'accessories'], function () {
     });
 });
 
-Route::group(['prefix' => 'damage-parts'], function () {
-    //Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'auto-parts'], function () {
+    Route::group(['middleware' => 'auth:api'], function () {
     //Route::post('add', [InspectionsController::class, 'create']);
     Route::get('list', [DamagePartsController::class, 'list']);
     //Route::get('details', [InspectionsController::class, 'getById']);
     //Route::post('close', [InspectionsController::class, 'close']);
-    // });
+     });
+});
+
+Route::group(['prefix' => 'fuel-tanks'], function () {
+    Route::group(['middleware' => 'auth:api'], function () {
+        //Route::post('add', [InspectionsController::class, 'create']);
+        Route::get('list', [FuelTanksController::class, 'list']);
+        //Route::get('details', [InspectionsController::class, 'getById']);
+        //Route::post('close', [InspectionsController::class, 'close']);
+    });
 });
 
 Route::group(['prefix' => 'damage-types'], function () {

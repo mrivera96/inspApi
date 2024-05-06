@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Car;
-use App\Models\Damage;
 use App\Models\Inspection;
 use App\Models\InspectionAccesories;
 use App\Models\InspectionPhoto;
@@ -15,7 +13,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use function PHPUnit\Framework\isNull;
 
 
 class InspectionsController extends Controller
@@ -23,7 +20,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart'])->get();
+            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->get();
 
             return response()->json(
                 [
@@ -132,7 +129,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
@@ -193,7 +190,7 @@ class InspectionsController extends Controller
 
             if ($checkinPhotos != null) {
                 foreach ($checkinPhotos as $photo) {
-                    if(Str::length($photo['foto']) > 100){
+                    if (Str::length($photo['foto']) > 100) {
                         $image = str_replace('data:image/png;base64,', '', $photo['foto']);
                         $image = str_replace(' ', '+', $image);
                         $imageName = Str::random(15) . time() . '.png';
@@ -214,7 +211,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,

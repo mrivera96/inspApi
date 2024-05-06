@@ -15,14 +15,14 @@ class ContractsController extends Controller
             $contracts = Contract::with(
                 [
                     'checkOutAgency',
-                    'checkInAgency',
+                    'checkInAgency', 'checkOutFuel', 'checkInFuel',
                     'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro,idEstado',
                     'car.model:idModeloVehiculo,idMarcaVehiculo', 'car.model.brand:idMarcaVehiculo,descMarca',
                     'customer:idCliente,nomCliente,correoI,celularI',
                     'inspection'
 
                 ]
-            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato','idAgenciaSalida','idAgenciaEntrega')->get();
+            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato', 'idAgenciaSalida', 'idAgenciaEntrega', 'idTanqueSal', 'idTanqueEnt')->get();
 
             return response()->json(
                 [

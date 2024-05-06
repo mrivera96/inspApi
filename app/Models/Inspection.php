@@ -72,4 +72,13 @@ class Inspection extends Model
     {
         return $this->hasMany(InspectionPhoto::class, 'idInspeccion', 'idInspeccion');
     }
+
+    public function checkOutFuel(): HasOne
+    {
+        return $this->hasOne(FuelTank::class, 'idTanqueComb', 'combSalida');
+    }
+    public function checkInFuel(): HasOne
+    {
+        return $this->hasOne(FuelTank::class, 'idTanqueComb', 'combEntrega');
+    }
 }

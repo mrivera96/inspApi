@@ -60,4 +60,13 @@ class Contract extends Model
     {
         return $this->belongsTo(Inspection::class, 'idContrato', 'idContrato');
     }
+
+    public function checkOutFuel(): HasOne
+    {
+        return $this->hasOne(FuelTank::class, 'idTanqueComb', 'idTanqueSal');
+    }
+    public function checkInFuel(): HasOne
+    {
+        return $this->hasOne(FuelTank::class, 'idTanqueComb', 'idTanqueEnt');
+    }
 }

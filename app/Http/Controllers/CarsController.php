@@ -16,13 +16,11 @@ class CarsController extends Controller
     {
         try {
 
-            $contracts = Contract::with(
-                [   
-                    'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro', 
-                    'car.model:idModeloVehiculo,idMarcaVehiculo', 'car.model.brand:idMarcaVehiculo,descMarca', 
-                    'customer:idCliente,nomCliente,correoI,celularI'
+            $contracts = Car::with(
+                [
+                    'model:idModeloVehiculo,idMarcaVehiculo', 'model.brand:idMarcaVehiculo,descMarca'
                 ]
-            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato')->get();
+            )->whereIn('idEstado', [3,5])->select('idVehiculo','nemVehiculo','numMatricula','idModeloVehiculo','modelo','nemVehiculo','odometro')->get();
 
             return response()->json(
                 [

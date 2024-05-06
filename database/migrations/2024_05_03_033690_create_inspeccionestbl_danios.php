@@ -41,7 +41,7 @@ return new class extends Migration {
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idInspeccion_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idPieza_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_idTipoDanio_foreign');
-            $table->dropForeign('Inspecciones_tblFotosInspeccion_idFoto_foreign');
+            $table->dropForeign('Inspecciones_tblDaniosInspeccion_idFoto_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_usuarioCreacion_foreign');
             $table->dropForeign('Inspecciones_tblDaniosInspeccion_usuarioModificacion_foreign');
         });

@@ -16,14 +16,14 @@ return new class extends Migration {
             $table->unsignedInteger('idCliente')->nullable(false);
             $table->unsignedInteger('idVehiculo')->nullable(false);
             $table->unsignedInteger('idAgenciaSalida')->nullable(false);
-            $table->string('combSalida')->nullable(false);
+            $table->unsignedInteger('combSalida')->nullable(false);
             $table->integer('rendCombSalida')->nullable();
             $table->integer('odoSalida')->nullable(false);
             $table->datetime('fechaSalida')->nullable(false);
             $table->integer('idUsuarioSalida')->nullable(false);
             $table->string('firmaClienteSalida', length: 80)->nullable();
             $table->unsignedInteger('idAgenciaEntrega')->nullable();
-            $table->string('combEntrega')->nullable();
+            $table->unsignedInteger('combEntrega')->nullable();
             $table->integer('rendCombEntrega')->nullable();
             $table->integer('odoEntrega')->nullable();
             $table->dateTime('fechaEntrega')->nullable();
@@ -47,6 +47,8 @@ return new class extends Migration {
             $table->foreign('idVehiculo')->references('idVehiculo')->on('tblVehiculos');
             $table->foreign('idAgenciaSalida')->references('idAgencia')->on('clsAgencias');
             $table->foreign('idAgenciaEntrega')->references('idAgencia')->on('clsAgencias');
+            $table->foreign('combSalida')->references('idTanqueComb')->on('clsTanqueComb');
+            $table->foreign('combEntrega')->references('idTanqueComb')->on('clsTanqueComb');
             $table->foreign('idUsuarioEntrega')->references('idUsuario')->on('tblUsuarios');
             $table->foreign('idEstado')->references('idEstado')->on('clsEstados');
             $table->foreign('usuarioCreacion')->references('idUsuario')->on('tblUsuarios');
@@ -65,6 +67,8 @@ return new class extends Migration {
             $table->dropForeign('Inspecciones_tblInspecciones_idVehiculo_foreign');
             $table->dropForeign('Inspecciones_tblInspecciones_idAgenciaSalida_foreign');
             $table->dropForeign('Inspecciones_tblInspecciones_idAgenciaEntrega_foreign');
+            $table->dropForeign('Inspecciones_tblInspecciones_combSalida_foreign');
+            $table->dropForeign('Inspecciones_tblInspecciones_combEntrega_foreign');
             $table->dropForeign('Inspecciones_tblInspecciones_idUsuarioEntrega_foreign');
             $table->dropForeign('Inspecciones_tblInspecciones_idEstado_foreign');
             $table->dropForeign('Inspecciones_tblInspecciones_usuarioCreacion_foreign');
