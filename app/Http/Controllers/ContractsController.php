@@ -19,10 +19,12 @@ class ContractsController extends Controller
                     'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro,idEstado',
                     'car.model:idModeloVehiculo,idMarcaVehiculo', 'car.model.brand:idMarcaVehiculo,descMarca',
                     'customer:idCliente,nomCliente,correoI,celularI',
-                    'inspection'
+                    'inspection',
+                    'driver',
+                    'additionalDriver'
 
                 ]
-            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato', 'idAgenciaSalida', 'idAgenciaEntrega', 'idTanqueSal', 'idTanqueEnt')->get();
+            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato', 'idAgenciaSalida', 'idAgenciaEntrega', 'idTanqueSal', 'idTanqueEnt', 'idConductor', 'idConductorAdic')->get();
 
             return response()->json(
                 [

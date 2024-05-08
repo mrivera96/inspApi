@@ -69,4 +69,14 @@ class Contract extends Model
     {
         return $this->hasOne(FuelTank::class, 'idTanqueComb', 'idTanqueEnt');
     }
+
+    public function driver(): HasOne
+    {
+        return $this->hasOne(User::class, 'idUsuario', 'idConductor');
+    }
+
+    public function additionalDriver(): HasOne
+    {
+        return $this->hasOne(User::class, 'idUsuario', 'idConductorAdic');
+    }
 }
