@@ -61,8 +61,8 @@ class InspectionsController extends Controller
         $newInspection->fechaSalida = new Carbon($request->fechaSalida);
         $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
         $newInspection->idEstado = 48;
-
-
+        $newInspection->correoCliente = $request->correoCliente;
+        $newInspection->correoConductor = $request->correoConductor;
         $checkoutPhotos = $request->photos;
         $accessoriesCheckout = $request->accesoriosSalida;
 
@@ -156,6 +156,8 @@ class InspectionsController extends Controller
         $newInspection->fechaEntrega = new Carbon(now());
         $newInspection->idUsuarioEntrega = Auth::user()->idUsuario;
         $newInspection->idEstado = 49;
+        $newInspection->correoCliente = $request->correoCliente;
+        $newInspection->correoConductor = $request->correoConductor;
 
 
         $checkinPhotos = $request->photos;

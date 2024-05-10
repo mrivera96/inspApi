@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
@@ -14,5 +15,13 @@ class Customer extends Model
     ];
     public function contracts(): HasMany{
         return $this->hasMany(Contract::class, 'idCliente', 'idCliente');
+    }
+
+    public function driverContracts(): BelongsTo{
+        return $this->belongsTo(Contract::class, 'idConductor', 'idCliente');
+    }
+
+    public function additionalDriverContracts(): BelongsTo{
+        return $this->belongsTo(Contract::class, 'idConductorAdic', 'idCliente');
     }
 }

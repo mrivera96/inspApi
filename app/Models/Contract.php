@@ -72,11 +72,11 @@ class Contract extends Model
 
     public function driver(): HasOne
     {
-        return $this->hasOne(User::class, 'idUsuario', 'idConductor');
+        return $this->hasOne(Customer::class, 'idCliente', 'idConductor');
     }
 
     public function additionalDriver(): HasOne
     {
-        return $this->hasOne(User::class, 'idUsuario', 'idConductorAdic');
+        return $this->hasOne(User::class, 'idCliente', 'idConductorAdic');
     }
 }
