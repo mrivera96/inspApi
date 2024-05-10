@@ -16,7 +16,7 @@ class ContractsController extends Controller
                 [
                     'checkOutAgency',
                     'checkInAgency', 'checkOutFuel', 'checkInFuel',
-                    'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro,idEstado',
+                    'car:idVehiculo,nemVehiculo,numMatricula,idModeloVehiculo,modelo,nemVehiculo,odometro,idEstado,color',
                     'car.model:idModeloVehiculo,idMarcaVehiculo', 'car.model.brand:idMarcaVehiculo,descMarca',
                     'customer:idCliente,nomCliente,correoI,celularI',
                     'inspection',

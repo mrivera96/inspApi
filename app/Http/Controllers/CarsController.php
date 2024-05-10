@@ -20,7 +20,7 @@ class CarsController extends Controller
                 [
                     'model:idModeloVehiculo,idMarcaVehiculo', 'model.brand:idMarcaVehiculo,descMarca'
                 ]
-            )->whereIn('idEstado', [3,5])->select('idVehiculo','nemVehiculo','numMatricula','idModeloVehiculo','modelo','nemVehiculo','odometro')->get();
+            )->whereIn('idEstado', [3,5])->select('idVehiculo','nemVehiculo','numMatricula','idModeloVehiculo','modelo','nemVehiculo','odometro','color')->get();
 
             return response()->json(
                 [
