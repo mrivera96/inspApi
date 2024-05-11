@@ -59,18 +59,9 @@ class Inspection extends Model
         return $this->hasOne(User::class, 'idUsuario', 'idUsuarioEntrega');
     }
 
-    public function checkoutDamages(): HasMany
-    {
-        return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkout');
-    }
-    public function checkinDamages(): HasMany
-    {
-        return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkin');
-    }
-
     public function photos(): HasMany
     {
-        return $this->hasMany(InspectionPhoto::class, 'idInspeccion', 'idInspeccion');
+        return $this->hasMany(InspectionPhoto::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkout');
     }
 
     public function checkOutFuel(): HasOne
@@ -80,5 +71,10 @@ class Inspection extends Model
     public function checkInFuel(): HasOne
     {
         return $this->hasOne(FuelTank::class, 'idTanqueComb', 'combEntrega');
+    }
+
+    public function damages(): HasMany
+    {
+        return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion');
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  *
@@ -18,13 +20,27 @@ class Damage extends Model
     protected $primaryKey = 'idDanio';
     protected $casts = [
         'idDanio' => 'integer',
-    ];
+        'idInspeccion' => 'integer',
+        'idPieza' => 'integer',
+        'idTipoDanio' => 'integer',
+        'idFoto' => 'integer',
+        ];
 
-    public function damageType(){
+
+    public function damageType():HasOne{
         return $this->hasOne(DamageType::class,'idTipoDanio');
     }
 
-    public function damagePart(){
+    public function damagePart():HasOne{
         return $this->hasOne(AutoPart::class,'idPieza');
+    }
+
+    public function photo():HasOne{
+        return $this->hasOne(InspectionPhoto::class,'idFoto','idFoto');
+    }
+
+    public  function inspections(): BelongsTo
+    {
+        return $this->belongsTo(Inspection::class,'idInspeccion');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Damage;
 use App\Models\Inspection;
 use App\Models\InspectionAccesories;
 use App\Models\InspectionPhoto;
@@ -20,7 +21,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->get();
+            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages','damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->get();
 
             return response()->json(
                 [
@@ -209,11 +210,22 @@ class InspectionsController extends Controller
                         $newPhoto->usuarioCreacion = Auth::user()->idUsuario;
                         $newPhoto->foto = '/img/' . $newInspection->idInspeccion . '/fotosEntrada/' . $imageName;
                         $newPhoto->save();
+
+                        if ($photo['damage'] != null) {
+                            $newDamage = new Damage();
+                            $newDamage->idInspeccion = $newInspection->idInspeccion;
+                            $newDamage->idPieza = $photo['idPieza'];
+                            $newDamage->idTipoDanio = $photo['damage']['idTipoDanio'];
+                            $newDamage->etapa = 'checkin';
+                            $newDamage->idFoto = $newPhoto->idFoto;
+                            $newDamage->usuarioCreacion = Auth::user()->idUsuario;
+                            $newDamage->save();
+                        }
                     }
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages.photo','damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
