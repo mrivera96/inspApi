@@ -16,6 +16,9 @@ class Inspection extends Model
         'idInspeccion' => 'integer',
     ];
 
+    protected $fillable = ['numInspeccion','idAgenciaSalida'];
+
+
 
     public function car(): HasOne
     {
@@ -76,5 +79,52 @@ class Inspection extends Model
     public function damages(): HasMany
     {
         return $this->hasMany(Damage::class, 'idInspeccion', 'idInspeccion');
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Handle the "creating" event to generate the identifier
+        static::creating(function ($inspection) {
+            // Get the last inspection conducted in the same city
+            $lastInspection = static::where('idAgenciaSalida', $inspection->idAgenciaSalida)
+                ->orderBy('idInspeccion', 'desc')
+                ->get()
+                ->first();
+
+
+
+            //get preffix
+            $codCiudad = Agency::where('idAgencia',$inspection->idAgenciaSalida)->first()->idCiudad;
+            switch ($codCiudad){
+                case 1:
+                    $preffix = 'TGU';
+                    break;
+
+                case 2:
+                    $preffix = 'SPS';
+                    break;
+                case 3:
+                    $preffix = 'CHL';
+                    break;
+                case 6:
+                    $preffix = 'COM';
+                    break;
+            }
+
+
+            // Generate the new identifier
+            if ($lastInspection) {
+                $lastIdParts = explode('-', $lastInspection->numInspeccion);
+                $number = intval($lastIdParts[1] . $lastIdParts[2]) + 1;
+            } else {
+                $number = 1;
+            }
+
+
+            $inspection->numInspeccion = $preffix . '-'. substr_replace(str_pad($number, 6, '0', STR_PAD_LEFT), '-', 2, 0);
+        });
     }
 }

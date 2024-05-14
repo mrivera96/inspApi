@@ -1,8 +1,12 @@
-<?php
+<?php /** @noinspection ALL */
+/** @noinspection ALL */
+
+/** @noinspection PhpArithmeticTypeCheckInspection */
 
 namespace App\Http\Controllers;
 
 
+use App\Models\Agency;
 use App\Models\Damage;
 use App\Models\Inspection;
 use App\Models\InspectionAccesories;
@@ -45,6 +49,7 @@ class InspectionsController extends Controller
         return Inspection::where('idVehiculo', $idVehiculo)->where('idEstado', 32)->count();
     }
 
+    /** @noinspection PhpArithmeticTypeCheckInspection */
     public function create(Request $request): JsonResponse
     {
 
@@ -130,7 +135,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'checkoutDamages', 'checkoutDamages.damageType', 'checkoutDamages.damagePart', 'checkinDamages', 'checkinDamages.damageType', 'checkinDamages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,

@@ -13,6 +13,7 @@ class Agency extends Model
     protected $hidden = ['datosRentaWeb'];
     protected $casts = [
         'idAgencia' => 'integer',
+        'idCiudad' => 'integer',
     ];
 
     public function checkoutContracts(): BelongsTo
@@ -23,5 +24,10 @@ class Agency extends Model
     public function checkinContracts(): BelongsTo
     {
         return $this->belongsTo(Contract::class, 'idAgencia', 'idAgenciaEntrega');
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'idCiudad', 'idCiudad');
     }
 }
