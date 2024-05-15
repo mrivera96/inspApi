@@ -3,7 +3,7 @@
 use App\Http\Controllers\AccessoriesController;
 use App\Http\Controllers\AgenciesController;
 use App\Http\Controllers\ContractsController;
-use App\Http\Controllers\DamagePartsController;
+use App\Http\Controllers\AutoPartsController;
 use App\Http\Controllers\DamagesController;
 use App\Http\Controllers\FuelTanksController;
 use App\Http\Controllers\InspectionsController;
@@ -23,20 +23,20 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'cars'], function () {
-    //Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('list', [CarsController::class, 'list']);
-    Route::get('search', [CarsController::class, 'search']);
-    Route::get('details', [CarsController::class, 'getDetails']);
-    Route::get('types', [CarsController::class, 'getTypes']);
-    //});
+    Route::group(['middleware' => ['auth:api']], function () {
+        Route::get('list', [CarsController::class, 'list']);
+        Route::get('search', [CarsController::class, 'search']);
+        Route::get('details', [CarsController::class, 'getDetails']);
+        Route::get('types', [CarsController::class, 'getTypes']);
+    });
 });
 
 Route::group(['prefix' => 'contracts'], function () {
     Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('list', [ContractsController::class, 'list']);
-    Route::get('search', [ContractsController::class, 'search']);
-    Route::get('details', [ContractsController::class, 'getDetails']);
-    Route::get('types', [ContractsController::class, 'getTypes']);
+        Route::get('list', [ContractsController::class, 'list']);
+        Route::get('search', [ContractsController::class, 'search']);
+        Route::get('details', [ContractsController::class, 'getDetails']);
+        Route::get('types', [ContractsController::class, 'getTypes']);
     });
 });
 
@@ -65,16 +65,17 @@ Route::group(['prefix' => 'users'], function () {
 Route::group(['prefix' => 'accessories'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('list', [AccessoriesController::class, 'list']);
+        Route::post('add', [AccessoriesController::class, 'create']);
+        Route::put('update', [AccessoriesController::class, 'update']);
     });
 });
 
 Route::group(['prefix' => 'auto-parts'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
-    //Route::post('add', [InspectionsController::class, 'create']);
-    Route::get('list', [DamagePartsController::class, 'list']);
-    //Route::get('details', [InspectionsController::class, 'getById']);
-    //Route::post('close', [InspectionsController::class, 'close']);
-     });
+        Route::post('add', [AutoPartsController::class, 'create']);
+        Route::get('list', [AutoPartsController::class, 'list']);
+        Route::put('update', [AutoPartsController::class, 'update']);
+    });
 });
 
 Route::group(['prefix' => 'fuel-tanks'], function () {
@@ -87,10 +88,9 @@ Route::group(['prefix' => 'fuel-tanks'], function () {
 });
 
 Route::group(['prefix' => 'damage-types'], function () {
-    //Route::group(['middleware' => 'auth:api'], function () {
-    //Route::post('add', [InspectionsController::class, 'create']);
-    Route::get('list', [DamagesController::class, 'listTypes']);
-    //Route::get('details', [InspectionsController::class, 'getById']);
-    //Route::post('close', [InspectionsController::class, 'close']);
-    // });
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('add', [DamagesController::class, 'createType']);
+        Route::get('list', [DamagesController::class, 'listTypes']);
+        Route::put('update', [DamagesController::class, 'updateType']);
+    });
 });

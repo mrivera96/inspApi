@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DamageType;
+use App\Models\AutoPart;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
-class DamagesController extends Controller
+class AutoPartsController extends Controller
 {
-
-    public function listTypes(): JsonResponse
+    public function list(): JsonResponse
     {
         try {
 
-            $damageTypes = DamageType::all();
+            $damageTypes = AutoPart::all();
             return response()->json(
                 [
                     'error' => 0,
@@ -32,17 +32,17 @@ class DamagesController extends Controller
         }
     }
 
-    public function createType(Request $request): JsonResponse{
+    public function create(Request $request): JsonResponse{
         try {
-            $newDamageType = new DamageType();
-            $newDamageType->descTipoDanio = $request->descTipoDanio;
-            $newDamageType->isActivo = $request->isActivo;
-            $newDamageType->usuarioCreacion = Auth::user()->idUsuario;
-            $newDamageType->save();
+            $newAutoPart = new AutoPart();
+            $newAutoPart->descPieza = $request->descPieza;
+            $newAutoPart->isActivo = $request->isActivo;
+            $newAutoPart->usuarioCreacion = Auth::user()->idUsuario;
+            $newAutoPart->save();
 
             return response()->json([
                 'error' => 0,
-                'data' => $newDamageType
+                'data' => $newAutoPart
             ]);
         } catch (\Exception $ex) {
             return response()->json([
@@ -53,17 +53,17 @@ class DamagesController extends Controller
         }
     }
 
-    public function updateType(Request $request): JsonResponse{
+    public function update(Request $request): JsonResponse{
         try {
-            $currentDamageType = DamageType::where('idTipoDanio',$request->idTipoDanio);
-            $currentDamageType->descTipoDanio = $request->descTipoDanio;
-            $currentDamageType->isActivo = $request->isActivo;
-            $currentDamageType->usuarioModificacion = Auth::user()->idUsuario;
-            $currentDamageType->update();
+            $currentAutoPart = AutoPart::where('idPieza',$request->idPieza);
+            $currentAutoPart->descPieza = $request->descPieza;
+            $currentAutoPart->isActivo = $request->isActivo;
+            $currentAutoPart->usuarioModificacion = Auth::user()->idUsuario;
+            $currentAutoPart->update();
 
             return response()->json([
                 'error' => 0,
-                'data' => $currentDamageType->get()
+                'data' => $currentAutoPart->get()
             ]);
         } catch (\Exception $ex) {
             return response()->json([
