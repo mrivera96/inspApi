@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\DamageType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
-class DamagesController extends Controller
+class DamageTypesController extends Controller
 {
 
     public function listTypes(): JsonResponse
@@ -55,7 +55,7 @@ class DamagesController extends Controller
 
     public function updateType(Request $request): JsonResponse{
         try {
-            $currentDamageType = DamageType::where('idTipoDanio',$request->idTipoDanio);
+            $currentDamageType = DamageType::where('idTipoDanio',$request->idTipoDanio)->first();
             $currentDamageType->descTipoDanio = $request->descTipoDanio;
             $currentDamageType->isActivo = $request->isActivo;
             $currentDamageType->usuarioModificacion = Auth::user()->idUsuario;
@@ -63,7 +63,7 @@ class DamagesController extends Controller
 
             return response()->json([
                 'error' => 0,
-                'data' => $currentDamageType->get()
+                'data' => $currentDamageType
             ]);
         } catch (\Exception $ex) {
             return response()->json([

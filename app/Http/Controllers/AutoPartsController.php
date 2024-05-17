@@ -6,7 +6,7 @@ use App\Models\AutoPart;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class AutoPartsController extends Controller
 {
@@ -55,7 +55,7 @@ class AutoPartsController extends Controller
 
     public function update(Request $request): JsonResponse{
         try {
-            $currentAutoPart = AutoPart::where('idPieza',$request->idPieza);
+            $currentAutoPart = AutoPart::where('idPieza',$request->idPieza)->first();
             $currentAutoPart->descPieza = $request->descPieza;
             $currentAutoPart->isActivo = $request->isActivo;
             $currentAutoPart->usuarioModificacion = Auth::user()->idUsuario;
@@ -63,7 +63,7 @@ class AutoPartsController extends Controller
 
             return response()->json([
                 'error' => 0,
-                'data' => $currentAutoPart->get()
+                'data' => $currentAutoPart
             ]);
         } catch (\Exception $ex) {
             return response()->json([

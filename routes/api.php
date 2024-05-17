@@ -4,7 +4,7 @@ use App\Http\Controllers\AccessoriesController;
 use App\Http\Controllers\AgenciesController;
 use App\Http\Controllers\ContractsController;
 use App\Http\Controllers\AutoPartsController;
-use App\Http\Controllers\DamagesController;
+use App\Http\Controllers\DamageTypesController;
 use App\Http\Controllers\FuelTanksController;
 use App\Http\Controllers\InspectionsController;
 use Illuminate\Support\Facades\Route;
@@ -89,8 +89,8 @@ Route::group(['prefix' => 'fuel-tanks'], function () {
 
 Route::group(['prefix' => 'damage-types'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('add', [DamagesController::class, 'createType']);
-        Route::get('list', [DamagesController::class, 'listTypes']);
-        Route::put('update', [DamagesController::class, 'updateType']);
+        Route::post('add', [DamageTypesController::class, 'createType']);
+        Route::get('list', [DamageTypesController::class, 'listTypes']);
+        Route::put('update', [DamageTypesController::class, 'updateType']);
     });
 });

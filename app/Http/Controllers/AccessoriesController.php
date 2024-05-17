@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use App\Models\Accessory;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class AccessoriesController extends Controller
 {
@@ -32,7 +32,7 @@ class AccessoriesController extends Controller
         try {
             $newAccessory = new Accessory();
             $newAccessory->nomAccesorio = $request->nomAccesorio;
-            $newAccessory->isActivo = $request->isActivo;
+            $newAccessory->isActivo = true;//$request->isActivo;
             $newAccessory->fechaIngreso = Carbon::now();
             $newAccessory->save();
 
@@ -51,15 +51,15 @@ class AccessoriesController extends Controller
 
     public function update(Request $request): JsonResponse{
         try {
-            $currentAccessory = Accessory::where('idAccesorio',$request->idAccesorio);
+            $currentAccessory = Accessory::where('idAccesorio',$request->idAccesorio)->first();
             $currentAccessory->nomAccesorio = $request->nomAccesorio;
-            $currentAccessory->isActivo = $request->isActivo;
+            $currentAccessory->isActivo = true;//$request->isActivo;
             $currentAccessory->fechaIngreso = Carbon::now();
             $currentAccessory->update();
 
             return response()->json([
                 'error' => 0,
-                'data' => $currentAccessory->get()
+                'data' => $currentAccessory
             ]);
         } catch (\Exception $ex) {
             return response()->json([
