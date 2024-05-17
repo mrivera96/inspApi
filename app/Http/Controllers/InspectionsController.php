@@ -11,6 +11,7 @@ use App\Models\Damage;
 use App\Models\Inspection;
 use App\Models\InspectionAccesories;
 use App\Models\InspectionPhoto;
+use App\Models\Accessory;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 
 class InspectionsController extends Controller
@@ -25,7 +27,7 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages','damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->get();
+            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages', 'damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->get();
 
             return response()->json(
                 [
@@ -230,7 +232,7 @@ class InspectionsController extends Controller
                 }
             }
 
-            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages.photo','damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
+            $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages.photo', 'damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
             return response()->json([
                 'error' => 0,
@@ -257,6 +259,35 @@ class InspectionsController extends Controller
                     'data' => $inspection
                 ]
             );
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'error' => 1,
+                    'message' => $ex->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function testMail(Request $request)
+    {
+        try {
+            $currentInspection = Inspection::with(
+                [
+                    'car', 'car.model', 'car.model.brand', 'state',
+                    'contract.customer', 'contract.checkOutAgency',
+                    'contract.checkInAgency', 'checkoutAccessories',
+                    'checkinAccessories', 'checkinAgent', 'checkoutAgent',
+                    'photos.autoPart', 'checkOutFuel', 'checkInFuel'
+                ]
+            )
+                ->where('idInspeccion', $request->idInspeccion)
+                ->first();
+            $today = Carbon::today()->format('d/m/Y');
+            $photosDirectory = "public/img";
+            $accessories = Accessory::where('isActivo', 1)->get();
+            return view('email.checkoutReport', compact('currentInspection', 'today', 'accessories'));
         } catch (Exception $ex) {
             return response()->json(
                 [
