@@ -285,9 +285,9 @@ class InspectionsController extends Controller
                 ->where('idInspeccion', $request->idInspeccion)
                 ->first();
             $today = Carbon::today()->format('d/m/Y');
-            $photosDirectory = "public/img";
+            $photosDirectory = env('APP_URL');
             $accessories = Accessory::where('isActivo', 1)->get();
-            return view('email.checkoutReport', compact('currentInspection', 'today', 'accessories'));
+            return view('email.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
         } catch (Exception $ex) {
             return response()->json(
                 [
