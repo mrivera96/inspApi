@@ -1986,7 +1986,7 @@ namespace Illuminate\Support\Facades {
          * @return \Symfony\Component\HttpFoundation\Response|null
          * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
          * @static
-         */        public static function basic($field = 'email', $extraConditions = [])
+         */        public static function basic($field = 'emails', $extraConditions = [])
         {
                         /** @var \Illuminate\Auth\SessionGuard $instance */
                         return $instance->basic($field, $extraConditions);
@@ -1999,7 +1999,7 @@ namespace Illuminate\Support\Facades {
          * @return \Symfony\Component\HttpFoundation\Response|null
          * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
          * @static
-         */        public static function onceBasic($field = 'email', $extraConditions = [])
+         */        public static function onceBasic($field = 'emails', $extraConditions = [])
         {
                         /** @var \Illuminate\Auth\SessionGuard $instance */
                         return $instance->onceBasic($field, $extraConditions);

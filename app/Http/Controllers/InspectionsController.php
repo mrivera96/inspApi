@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use Illuminate\Support\Facades\Mail;
 
 
 class InspectionsController extends Controller
@@ -287,7 +288,31 @@ class InspectionsController extends Controller
             $today = Carbon::today()->format('d/m/Y');
             $photosDirectory = env('APP_URL');
             $accessories = Accessory::where('isActivo', 1)->get();
-            return view('email.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
+
+           // return view('emails.checkoutReport',compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
+
+            $pdf = PDF::loadView('emails.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
+            $data["emails"] = "melvin.rivera@xplorerentacar.com";//$currentInspection->correoCliente;
+            $data["client_name"] = $currentInspection->contract->customer->nomCliente;
+            $data["title"] = "From Xplore Rent A Car";
+            $data["body"] = "This is Demo";
+            $data["currentInspection"] = $currentInspection;
+            $data["today"] = $today;
+            $data["accessories"] = $accessories;
+            $data["photosDirectory"] = $photosDirectory;
+
+            Mail::send('emails.checkoutReport',$data, function($message)use($data, $pdf) {
+                $message->to($data["emails"], $data["client_name"])
+                    ->subject($data["title"])
+                    ->attachData($pdf->output(), "Inspeccion de Salida ".$data["currentInspection"]["numInspeccion"].".pdf");
+            });
+            return response()
+                ->json([
+                    'message' => 'emails was send'
+                ], 200);
+
+
+            //return view('emails.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
         } catch (Exception $ex) {
             return response()->json(
                 [
@@ -297,6 +322,9 @@ class InspectionsController extends Controller
                 500
             );
         }
+
+
+
     }
 
 }
