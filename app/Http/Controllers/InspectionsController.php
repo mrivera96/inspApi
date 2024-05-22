@@ -291,7 +291,7 @@ class InspectionsController extends Controller
 
 
             $pdf = PDF::loadView('emails.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-            $data["emails"] = "jylrivera96@gmail.com";//$currentInspection->correoCliente;
+            $data["emails"] = "melvin.rivera@xplorerentacar.com";//$currentInspection->correoCliente;
             $data["client_name"] = $currentInspection->contract->customer->nomCliente;
             $data["title"] = "From Xplore Rent A Car";
             $data["body"] = "This is Demo";
