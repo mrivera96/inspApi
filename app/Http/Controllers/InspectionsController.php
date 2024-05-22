@@ -289,10 +289,9 @@ class InspectionsController extends Controller
             $photosDirectory = env('APP_URL');
             $accessories = Accessory::where('isActivo', 1)->get();
 
-           // return view('emails.checkoutReport',compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
 
             $pdf = PDF::loadView('emails.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-            $data["emails"] = "melvin.rivera@xplorerentacar.com";//$currentInspection->correoCliente;
+            $data["emails"] = "jylrivera96@gmail.com";//$currentInspection->correoCliente;
             $data["client_name"] = $currentInspection->contract->customer->nomCliente;
             $data["title"] = "From Xplore Rent A Car";
             $data["body"] = "This is Demo";
@@ -306,6 +305,7 @@ class InspectionsController extends Controller
                     ->subject($data["title"])
                     ->attachData($pdf->output(), "Inspeccion de Salida ".$data["currentInspection"]["numInspeccion"].".pdf");
             });
+            //return view('emails.checkoutReport',compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
             return response()
                 ->json([
                     'message' => 'emails was send'

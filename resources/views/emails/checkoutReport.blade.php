@@ -28,18 +28,19 @@
 
 
     <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <img class="img" src="https://xplorerentacar.com/wp-content/uploads/2020/02/logo-xplore-marcas.png"
                  alt="Xplore Rent a Car" id="logo" width="100px">
+            <strong style="color: #00008BFF;"><p>ALQUILER DE CARROS, S.A. DE C.V.
+                    <br> RTN: 08019007056250</p></strong>
+
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <p>Tegucigalpa, M.D.C.
+
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <p class="text-right">Tegucigalpa, M.D.C.
                 <br>{{$today}}
             </p>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <strong style="color: #00008BFF;"><p>ALQUILER DE CARROS, S.A. DE C.V.</p></strong><br>
-            <strong style="color: #00008BFF;"><p>RTN: 08019007056250</p></strong>
+
         </div>
 
     </div>
@@ -81,6 +82,26 @@
                     {{$currentInspection->car->modelo}}
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h5>Licencia:</h5>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    @if ($currentInspection->fotoLicencia != null)
+
+                        <img
+                            height="100px"
+                            src="{{$photosDirectory.$currentInspection->fotoLicencia}}"
+                        >
+
+                    @else
+                        <p>Sin registro</p>
+
+                    @endif
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -97,7 +118,7 @@
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <h5>Datos generales</h5>
+                            <h4>Datos generales</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -138,161 +159,136 @@
                     </div>
 
                 </div>
-            </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h4>Accesorios</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @foreach ($accessories as $accessory )
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                @if($currentInspection->checkoutAccessories->contains($accessory))
 
+                                    <input
+                                        style="color:#f58220 !important;"
+                                        type="checkbox"
+                                        checked="true"
+                                    > {{ $accessory->nomAccesorio }}
+                                @else
+                                    <input
+                                        type="checkbox"
+                                        disabled
+                                    > {{ $accessory->nomAccesorio }}
+                                @endif
+                            </div>
 
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div class="row">
-                    <div class="col">
-                        <h5>Licencia:</h5>
+                        @endforeach
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        @if ($currentInspection->fotoLicencia != null)
+            </div>
 
-                            <img
-                                height="100px"
-                                src="{{$photosDirectory.$currentInspection->fotoLicencia}}"
-                            >
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h4>
+                        Fotografías:
+                    </h4>
+                </div>
+            </div>
+            <div class="row">
+                @if (sizeof($currentInspection->photos)>0)
 
-                        @else
-                            <p>Sin registro</p>
+                    @foreach ($currentInspection->photos as $photo)
+
+                        @if($photo->etapa == 'checkout')
+
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+                                <h5>{{$photo->autoPart->descPieza}}</h5>
+                                <img
+                                    height="100px"
+                                    src="{{$photosDirectory.$photo->foto}}"
+                                >
+                            </div>
 
                         @endif
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h5>
-                    Fotografías:
-                </h5>
-            </div>
-        </div>
-        <div class="row">
-            @if (sizeof($currentInspection->photos)>0)
-
-                @foreach ($currentInspection->photos as $photo)
-
-                    @if($photo->etapa == 'checkout')
-
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-
-                            <h5>{{$photo->autoPart->descPieza}}</h5>
-                            <img
-                                height="100px"
-                                src="{{$photosDirectory.$photo->foto}}"
-                            >
-                        </div>
-
-                    @endif
-
-                @endforeach
-        </div>
-
-        @else
-
-            <div>
-                <p>Sin registro</p>
-            </div>
-
-        @endif
-
-
-        <div class="row">
-
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4>Accesorios</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    @foreach ($accessories as $accessory )
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            @if($currentInspection->checkoutAccessories->contains($accessory))
-
-                                <input
-                                    style="color:#f58220 !important;"
-                                    type="checkbox"
-                                    checked="true"
-                                > {{ $accessory->nomAccesorio }}
-                            @else
-                                <input
-                                    type="checkbox"
-                                    disabled
-                                > {{ $accessory->nomAccesorio }}
-                            @endif
-                        </div>
 
                     @endforeach
-                </div>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4>Adicional</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <i class="fas fa-circle-dot"></i>
-                        Notas Llantas delanteras:
-                        {{$currentInspection->comentariosLlantasDelanteras || 'Sin Registro'}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <i class="fas fa-circle-dot"></i>
-                        Notas Llantas traseras:
-                        {{$currentInspection->comentariosLlantasTraseras ||
-        'SinRegistro'}}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <i class="fas fa-battery"></i>
-                        Notas batería: {{$currentInspection->comentariosBateria ||
-            'SinRegistro'}}
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h4>Firma del cliente</h4>
-        </div>
-    </div>
-    <div class="row text-center">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            @if($currentInspection->firmaClienteSalida )
-                <img
-                    width="300px"
-                    src="{{$photosDirectory . $currentInspection->firmaClienteSalida}}"
-                >
 
             @else
-                <p>Sin Registro</p>
+
+                <div>
+                    <p>Sin registro</p>
+                </div>
+
             @endif
+
+
+            <div class="row">
+
+
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h4>Adicional</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <i class="fas fa-circle-dot"></i>
+                            Notas Llantas delanteras:
+                            {{$currentInspection->comentariosLlantasDelanteras || 'Sin Registro'}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <i class="fas fa-circle-dot"></i>
+                            Notas Llantas traseras:
+                            {{$currentInspection->comentariosLlantasTraseras ||
+            'SinRegistro'}}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <i class="fas fa-battery"></i>
+                            Notas batería: {{$currentInspection->comentariosBateria ||
+            'SinRegistro'}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h4>Firma del cliente</h4>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    @if($currentInspection->firmaClienteSalida )
+                        <img
+                            width="300px"
+                            src="{{$photosDirectory . $currentInspection->firmaClienteSalida}}"
+                        >
+
+                    @else
+                        <p>Sin Registro</p>
+                    @endif
+                </div>
+            </div>
         </div>
 
+
+        <br>
     </div>
-</div>
 
 
 </div>
-</div>
 
 
-</div>
 <script src="{{asset('/assets/js/jquery-1.12.4.min.js')}}"
 ></script>
 
