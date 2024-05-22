@@ -19,7 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\PDF;
+use PDF;
 use Illuminate\Support\Facades\Mail;
 
 
