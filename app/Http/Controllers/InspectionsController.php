@@ -287,7 +287,7 @@ class InspectionsController extends Controller
                 ->first();
             $today = Carbon::today()->format('d/m/Y');
             $photosDirectory = env('APP_URL');
-            $accessories = Accessory::where('isActivo', 1)->get();
+            $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
 
 
             $pdf = PDF::loadView('emails.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
@@ -300,15 +300,15 @@ class InspectionsController extends Controller
             $data["accessories"] = $accessories;
             $data["photosDirectory"] = $photosDirectory;
 
-        /*    Mail::send('emails.checkoutReport',$data, function($message)use($data, $pdf) {
-                $message->to($data["emails"], $data["client_name"])
-                    ->subject($data["title"])
-                    ->attachData($pdf->output(), "Inspeccion de Salida ".$data["currentInspection"]["numInspeccion"].".pdf");
-            });*/
+//            Mail::send('emails.checkoutReport',$data, function($message)use($data, $pdf) {
+//                $message->to($data["emails"], $data["client_name"])
+//                    ->subject($data["title"])
+//                    ->attachData($pdf->output(), "Inspeccion de Salida ".$data["currentInspection"]["numInspeccion"].".pdf");
+//            });
 
 
 
-            return $pdf->download("Inspeccion de Salida.pdf");
+            //return $pdf->download("Inspeccion de Salida.pdf");
             return
                 view('emails.checkoutReport',compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
             return response()
