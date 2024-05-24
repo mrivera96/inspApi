@@ -64,7 +64,7 @@ class Inspection extends Model
 
     public function photos(): HasMany
     {
-        return $this->hasMany(InspectionPhoto::class, 'idInspeccion', 'idInspeccion')->where('etapa','checkout');
+        return $this->hasMany(InspectionPhoto::class, 'idInspeccion', 'idInspeccion');
     }
 
     public function checkOutFuel(): HasOne
