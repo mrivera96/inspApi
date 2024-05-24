@@ -308,7 +308,7 @@ class InspectionsController extends Controller
 
 
 
-            //return $pdf->download("Inspeccion de Salida.pdf");
+            return $pdf->download("Inspeccion de Salida.pdf");
             return
                 view('emails.checkoutReport',compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
             return response()
