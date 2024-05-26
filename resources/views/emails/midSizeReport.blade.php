@@ -18,6 +18,11 @@
     <style>
         body {
             font-size: 9px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        h5{
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         @page {
@@ -191,18 +196,21 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <h5>Licencia:</h5>
         </div>
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <h5>Adicional</h5>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <h5>Firma del cliente</h5>
         </div>
 
     </div>
 
     <div class="row">
 
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             @if ($currentInspection->fotoLicencia != null)
                 <img
                     height="70px"
@@ -213,7 +221,7 @@
             @endif
         </div>
 
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 
             <i class="fas fa-circle-dot"></i>
             Notas Llantas delanteras:
@@ -230,19 +238,7 @@
 
 
         </div>
-
-    </div>
-
-    <div class="row">
-
-        <div class="col-sm-6 col-md-6 col-lg-6">
-            <h5>Firma del cliente</h5>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             @if($currentInspection->firmaClienteSalida )
                 <img
                     height="70px"
@@ -255,6 +251,7 @@
 
 
         </div>
+
     </div>
 
 
