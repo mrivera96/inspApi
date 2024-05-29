@@ -47,12 +47,15 @@ Route::group(['prefix' => 'agencies'], function () {
 });
 
 Route::group(['prefix' => 'inspections'], function () {
+    Route::get('print', [InspectionsController::class,'print']);
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('add', [InspectionsController::class, 'create']);
         Route::get('list', [InspectionsController::class, 'list']);
         Route::get('details', [InspectionsController::class, 'getById']);
         Route::post('close', [InspectionsController::class, 'close']);
+
     });
+
 });
 
 

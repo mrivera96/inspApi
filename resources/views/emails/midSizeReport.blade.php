@@ -18,15 +18,11 @@
     <style>
         body {
             font-size: 9px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-
-        h5{
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: "Arial", sans-serif !important;
         }
 
         @page {
-            margin: 0;
+            margin: 20px;
         }
 
         .wrapper-page {
@@ -49,8 +45,8 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <img class="img"
-                         src="https://xplorerentacar.com/wp-content/uploads/2020/02/logo-xplore-marcas.png"
-                         alt="Xplore Rent a Car" id="logo" width="100px">
+                         src="{{asset('/assets/img/logo_xplore.png')}}"
+                         alt="Xplore Rent a Car" id="logo" width="140px">
                 </div>
             </div>
         </div>
@@ -68,7 +64,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h5>Inspección No. {{$currentInspection->numInspeccion}}</h5>
+            <strong>Inspección No. {{$currentInspection->numInspeccion}}</strong>
         </div>
     </div>
 
@@ -91,15 +87,15 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h5>Datos de Salida</h5>
+    <div class="row" style="background-color: #000000; color: #FFFFFF">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+            <strong>DATOS DE SALIDA</strong>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
-            <h5>Datos generales</h5>
+    <div class="row" style="background-color: #dcdcdc">
+        <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+            <strong>Datos generales</strong>
         </div>
     </div>
     <div class="row">
@@ -127,16 +123,16 @@
         <div class="col-sm-4 col-md-4 col-lg-4">
             <i class="fas fa-calendar"></i>
             Fecha de salida:
-            {{Carbon\Carbon::create($currentInspection->fechaSalida)->format('d/m/Y')}}
+            {{Carbon\Carbon::create($currentInspection->contract->fechaSalida)->format('d/m/Y h:m')}}
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h5>Accesorios</h5>
+    <div class="row" style="background-color: #dcdcdc">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+            <strong>Accesorios</strong>
         </div>
     </div>
-
+    <br>
     <div class="row">
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -165,11 +161,11 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h5>
-                Fotografías:
-            </h5>
+    <div class="row" style="background-color: #dcdcdc">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+            <strong>
+                Fotografías
+            </strong>
         </div>
     </div>
     <br>
@@ -191,35 +187,25 @@
                     @endif
 
                 @endforeach
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <h5>Licencia:</h5>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <h5>Adicional</h5>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <h5>Firma del cliente</h5>
-        </div>
-
-    </div>
-
-    <div class="row">
-
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            @if ($currentInspection->fotoLicencia != null)
                 <img
                     height="70px"
                     src="{{$photosDirectory.$currentInspection->fotoLicencia}}"
                 >
-            @else
-                <p>Sin registro</p>
-            @endif
+            </div>
         </div>
+    </div>
+
+    <div class="row" style="background-color: #dcdcdc">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+            <strong>Adicional</strong>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+            <strong>Firma del cliente</strong>
+        </div>
+
+    </div>
+    <br>
+    <div class="row">
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
 
@@ -238,34 +224,29 @@
 
 
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            @if($currentInspection->firmaClienteSalida )
+        @if($currentInspection->firmaClienteSalida )
+            <div class="col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 text-right">
                 <img
                     height="70px"
                     src="{{$photosDirectory . $currentInspection->firmaClienteSalida}}"
                 >
-
-            @else
-                <p>Sin Registro</p>
-            @endif
-
-
-        </div>
-
+            </div>
+        @else
+            <p>Sin Registro</p>
+        @endif
     </div>
-
 
     @if($currentInspection->idEstado ==49)
 
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h5>Datos de Entrada</h5>
+        <div class="row" style="background-color: #000000; color: #FFFFFF">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <strong>DATOS DE ENTRADA</strong>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12">
-                <h5>Datos generales</h5>
+        <div class="row text-center" style="background-color: #dcdcdc">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <strong>Datos generales</strong>
             </div>
         </div>
         <div class="row">
@@ -293,17 +274,16 @@
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <i class="fas fa-calendar"></i>
                 Fecha de entrada:
-                {{Carbon\Carbon::create($currentInspection->fechaEntrega)->format('d/m/Y')}}
+                {{Carbon\Carbon::create($currentInspection->contract->fechaEntrega)->format('d/m/Y h:m')}}
             </div>
         </div>
 
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h5>Accesorios</h5>
+        <div class="row text-center" style="background-color: #dcdcdc">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <strong>Accesorios</strong>
             </div>
         </div>
-
+        <br>
         <div class="row">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -317,7 +297,6 @@
                                     checked="true"
                                 > {{ $accessory->nomAccesorio }}
                             </label>
-
                         @else
                             <label>
                                 <input
@@ -325,18 +304,17 @@
                                     disabled
                                 > {{ $accessory->nomAccesorio }}
                             </label>
-
                         @endif
                     @endforeach
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <h5>
-                    Fotografías:
-                </h5>
+        <div class="row text-center" style="background-color: #dcdcdc">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <strong>
+                    Fotografías
+                </strong>
             </div>
         </div>
         <br>
@@ -362,16 +340,15 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6">
-                <h5>Firma del cliente</h5>
+        <div class="row text-center" style="background-color: #dcdcdc">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <strong>Firma del cliente</strong>
             </div>
         </div>
+        <br>
+        <div class="row text-right mr-1">
 
-        <div class="row">
-
-
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-offset-12 col-sm-offset-12 col-md-offset-12 col-lg-offset-12">
                 @if($currentInspection->firmaClienteEntrega )
                     <img
                         height="70px"

@@ -271,7 +271,49 @@ class InspectionsController extends Controller
         }
     }
 
-    public function testMail(Request $request)
+    public function print(Request $request)
+    {
+        try {
+            $currentInspection = Inspection::with(
+                [
+                    'car', 'car.model', 'car.model.brand', 'state',
+                    'contract.customer', 'contract.checkOutAgency',
+                    'contract.checkInAgency', 'checkoutAccessories',
+                    'checkinAccessories', 'checkinAgent', 'checkoutAgent',
+                    'photos.autoPart', 'checkOutFuel', 'checkInFuel'
+                ]
+            )
+                ->where('idInspeccion', $request->idInspeccion)
+                ->first();
+
+            $today = Carbon::today()->format('d/m/Y');
+            $photosDirectory = env('APP_URL');
+            $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
+
+            $view = 'emails.midSizeReport';
+
+            $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
+
+            return response()->json(
+                [
+                    'error' => 0,
+                    'data' => base64_encode($pdf->output())
+                ]
+            );
+        } catch (Exception $ex) {
+            return response()->json(
+                [
+                    'error' => 1,
+                    'message' => $ex->getMessage()
+                ],
+                500
+            );
+        }
+
+
+    }
+
+    /*public function testMail(Request $request)
     {
         try {
             $currentInspection = Inspection::with(
@@ -326,7 +368,7 @@ class InspectionsController extends Controller
         }
 
 
-    }
+    }*/
 
     private function sendEmail($currentInspection)
     {
@@ -372,11 +414,11 @@ class InspectionsController extends Controller
         $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
 
         switch ($viewType) {
-            case "midSize":
-                $view = 'emails.midSizeReport';
+            case "fullSize":
+                $view = 'emails.fullSizeReport';
                 break;
             default:
-                $view = 'emails.fullSizeReport';
+                $view = 'emails.midSizeReport';
                 break;
         }
         $vw = view($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
