@@ -18,11 +18,11 @@
     <style>
         body {
             font-size: 9px;
-            font-family: "Arial", sans-serif !important;
+            font-family: 'Arial',sans-serif;
         }
 
         @page {
-            margin: 20px;
+            margin: 10px;
         }
 
         .wrapper-page {
@@ -194,7 +194,7 @@
             </div>
         </div>
     </div>
-
+    <br>
     <div class="row" style="background-color: #dcdcdc">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
             <strong>Adicional</strong>
@@ -202,9 +202,9 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
             <strong>Firma del cliente</strong>
         </div>
-
     </div>
     <br>
+
     <div class="row">
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -235,7 +235,7 @@
             <p>Sin Registro</p>
         @endif
     </div>
-
+    <br>
     @if($currentInspection->idEstado ==49)
 
         <div class="row" style="background-color: #000000; color: #FFFFFF">
@@ -339,7 +339,7 @@
                 </div>
             </div>
         </div>
-
+        <br>
         <div class="row text-center" style="background-color: #dcdcdc">
             <div class="col-sm-12 col-md-12 col-lg-12 text-center">
                 <strong>Firma del cliente</strong>

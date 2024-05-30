@@ -293,7 +293,8 @@ class InspectionsController extends Controller
             $view = 'emails.midSizeReport';
 
             $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-
+            //return view($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
+            return $pdf->download('inspeccion.pdf');
             return response()->json(
                 [
                     'error' => 0,
