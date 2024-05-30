@@ -14,15 +14,15 @@
     >
     <link href="{{asset('/assets/css/font-awesome/fontawesome.css')}}" rel="stylesheet"
     >
-    <title>Inspección de Salida</title>
+    <title>Reporte de Inspección</title>
     <style>
         body {
             font-size: 9px;
-            font-family: 'Arial',sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
         @page {
-            margin: 10px;
+            margin: 5px;
         }
 
         .wrapper-page {
@@ -50,22 +50,21 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <p class="pl-1">Tegucigalpa, M.D.C.
-                <br>{{$today}}
-            </p>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <strong style="color: #00008BFF;"><p>ALQUILER DE CARROS, S.A. DE C.V.
+
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+            <strong style="color: #00008BFF;"><p>
+                    DOCUMENTO DE INSPECCIÓN <br>
+                    ALQUILER DE CARROS, S.A.
                     <br> RTN: 08019007056250</p></strong>
         </div>
-    </div>
 
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <strong>Inspección No. {{$currentInspection->numInspeccion}}</strong>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center" style="background-color: #dcdcdc;">
+            <h4 style="margin: 0 !important;padding: 0 !important;"><strong> Inspección No. <br> {{$currentInspection->numInspeccion}}</strong></h4>
         </div>
+
+    </div>
+    <div class="row">
+        <hr>
     </div>
 
     <div class="row">
@@ -120,47 +119,35 @@
             Agente:
             {{$currentInspection->checkoutAgent->nomUsuario}}
         </div>
-        <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <i class="fas fa-calendar"></i>
             Fecha de salida:
             {{Carbon\Carbon::create($currentInspection->contract->fechaSalida)->format('d/m/Y h:m')}}
         </div>
-    </div>
 
+    </div>
+    <br>
     <div class="row" style="background-color: #dcdcdc">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
             <strong>Accesorios</strong>
         </div>
     </div>
-    <br>
+
     <div class="row">
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                 @foreach ($accessories as $accessory )
                     @if($currentInspection->checkoutAccessories->contains($accessory))
-                        <label>
-                            <input
-                                style="color:#f58220 !important;"
-                                type="checkbox"
-                                checked="true"
-                            > {{ $accessory->nomAccesorio }}
-                        </label>
-
+                        <i class="fa-regular fa-square-check"></i> {{ $accessory->nomAccesorio }}
                     @else
-                        <label>
-                            <input
-                                type="checkbox"
-                                disabled
-                            > {{ $accessory->nomAccesorio }}
-                        </label>
-
+                        <i class="fa-regular fa-square"></i> {{ $accessory->nomAccesorio }}
                     @endif
                 @endforeach
             </div>
         </div>
     </div>
-
+    <br>
     <div class="row" style="background-color: #dcdcdc">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
             <strong>
@@ -169,10 +156,10 @@
         </div>
     </div>
     <br>
-    <div class="row mt-0 mb-0">
+    <div class="row">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-0 mb-0">
-            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 mt-0 mb-0">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-0">
+            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 mb-0">
                 @foreach ($currentInspection->photos as $photo)
 
                     @if($photo->etapa == 'checkout')
@@ -181,7 +168,7 @@
                             id="photo"
                             alt="photo"
                             height="70px"
-                            src="{{asset($photosDirectory.$photo->foto)}}"
+                            src="{{public_path($photo->foto)}}"
                         >
 
                     @endif
@@ -189,25 +176,24 @@
                 @endforeach
                 <img
                     height="70px"
-                    src="{{asset($photosDirectory.$currentInspection->fotoLicencia)}}"
+                    src="{{public_path($currentInspection->fotoLicencia)}}"
                 >
             </div>
         </div>
     </div>
     <br>
-    <div class="row" style="background-color: #dcdcdc">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
-            <strong>Adicional</strong>
+    <div class="row text-center" style="background-color: #dcdcdc">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+            <strong>Notas Adicionales</strong>
         </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
             <strong>Firma del cliente</strong>
         </div>
     </div>
     <br>
-
     <div class="row">
 
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 mt-1">
 
             <i class="fas fa-circle-dot"></i>
             Notas Llantas delanteras:
@@ -221,14 +207,17 @@
             <i class="fas fa-battery"></i>
             Notas batería: {{$currentInspection->comentariosBateria ||
             'SinRegistro'}}
-
+            <br>
+            <i class="fas fa-clipboard"></i>
+            Otras Observaciones:
 
         </div>
         @if($currentInspection->firmaClienteSalida )
-            <div class="col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 text-right">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right mt-1">
                 <img
                     height="70px"
-                    src="{{asset($photosDirectory . $currentInspection->firmaClienteSalida)}}"
+                    width="300px"
+                    src="{{public_path( $currentInspection->firmaClienteSalida)}}"
                 >
             </div>
         @else
@@ -271,45 +260,34 @@
                 Agente:
                 {{$currentInspection->checkinAgent->nomUsuario}}
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <i class="fas fa-calendar"></i>
                 Fecha de entrada:
                 {{Carbon\Carbon::create($currentInspection->contract->fechaEntrega)->format('d/m/Y h:m')}}
             </div>
         </div>
-
+        <br>
         <div class="row text-center" style="background-color: #dcdcdc">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <strong>Accesorios</strong>
             </div>
         </div>
-        <br>
+
         <div class="row">
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                     @foreach ($accessories as $accessory )
                         @if($currentInspection->checkinAccessories->contains($accessory))
-                            <label>
-                                <input
-                                    style="color:#f58220 !important;"
-                                    type="checkbox"
-                                    checked="true"
-                                > {{ $accessory->nomAccesorio }}
-                            </label>
+                            <i class="fa-regular fa-square-check"></i> {{ $accessory->nomAccesorio }}
                         @else
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    disabled
-                                > {{ $accessory->nomAccesorio }}
-                            </label>
+                            <i class="fa-regular fa-square"></i> {{ $accessory->nomAccesorio }}
                         @endif
                     @endforeach
                 </div>
             </div>
         </div>
-
+        <br>
         <div class="row text-center" style="background-color: #dcdcdc">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <strong>
@@ -318,10 +296,10 @@
             </div>
         </div>
         <br>
-        <div class="row mt-0 mb-0">
+        <div class="row">
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mt-0 mb-0">
-                <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 mt-0 mb-0">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                     @foreach ($currentInspection->photos as $photo)
 
                         @if($photo->etapa == 'checkin')
@@ -330,7 +308,7 @@
                                 id="photo"
                                 alt="photo"
                                 height="70px"
-                                src="{{asset($photosDirectory.$photo->foto)}}"
+                                src="{{public_path($photo->foto)}}"
                             >
 
                         @endif
@@ -341,18 +319,25 @@
         </div>
         <br>
         <div class="row text-center" style="background-color: #dcdcdc">
-            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+                <strong>Notas Adicionales</strong>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
                 <strong>Firma del cliente</strong>
             </div>
         </div>
         <br>
-        <div class="row text-right mr-1">
-
-            <div class="col-xs-offset-12 col-sm-offset-12 col-md-offset-12 col-lg-offset-12">
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <i class="fas fa-clipboard"></i>
+                Otras Observaciones:
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
                 @if($currentInspection->firmaClienteEntrega )
                     <img
                         height="70px"
-                        src="{{asset($photosDirectory . $currentInspection->firmaClienteEntrega)}}"
+                        width="300px"
+                        src="{{public_path($currentInspection->firmaClienteEntrega)}}"
                     >
 
                 @else
@@ -375,13 +360,3 @@
 </body>
 
 </html>
-
-<!--
-<ion-list>
-    <ion-list-header>
-        <p>Adicional</p>
-    </ion-list-header>
-
-
-
-        -->

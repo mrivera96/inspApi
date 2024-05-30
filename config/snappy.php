@@ -40,11 +40,9 @@ return [
         'options' => [
             'enable-local-file-access' => true,
             'lowquality' => false,
-            'image-quality'=>100,
-            'dpi'=> 296,
+            'dpi'=> 596,
             'disable-smart-shrinking' => true,
-            'images' => true,
-            'no-images' => false,
+
         ],
         'env'     => [],
     ],
