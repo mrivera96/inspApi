@@ -181,7 +181,7 @@
                             id="photo"
                             alt="photo"
                             height="70px"
-                            src="{{$photosDirectory.$photo->foto}}"
+                            src="{{asset($photosDirectory.$photo->foto)}}"
                         >
 
                     @endif
@@ -189,7 +189,7 @@
                 @endforeach
                 <img
                     height="70px"
-                    src="{{$photosDirectory.$currentInspection->fotoLicencia}}"
+                    src="{{asset($photosDirectory.$currentInspection->fotoLicencia)}}"
                 >
             </div>
         </div>
@@ -228,7 +228,7 @@
             <div class="col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 text-right">
                 <img
                     height="70px"
-                    src="{{$photosDirectory . $currentInspection->firmaClienteSalida}}"
+                    src="{{asset($photosDirectory . $currentInspection->firmaClienteSalida)}}"
                 >
             </div>
         @else
@@ -330,7 +330,7 @@
                                 id="photo"
                                 alt="photo"
                                 height="70px"
-                                src="{{$photosDirectory.$photo->foto}}"
+                                src="{{asset($photosDirectory.$photo->foto)}}"
                             >
 
                         @endif
@@ -352,7 +352,7 @@
                 @if($currentInspection->firmaClienteEntrega )
                     <img
                         height="70px"
-                        src="{{$photosDirectory . $currentInspection->firmaClienteEntrega}}"
+                        src="{{asset($photosDirectory . $currentInspection->firmaClienteEntrega)}}"
                     >
 
                 @else
