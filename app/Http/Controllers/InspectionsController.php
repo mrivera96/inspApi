@@ -139,7 +139,7 @@ class InspectionsController extends Controller
             }
 
             $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
-
+            $this->sendEmail($savedInspection);
             return response()->json([
                 'error' => 0,
                 'data' => $savedInspection
@@ -235,6 +235,7 @@ class InspectionsController extends Controller
 
             $savedInspection = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages.photo', 'damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->where('idInspeccion', $newInspection->idInspeccion)->first();
 
+            $this->sendEmail($savedInspection);
             return response()->json([
                 'error' => 0,
                 'data' => $savedInspection
@@ -296,29 +297,10 @@ class InspectionsController extends Controller
                 ->setOption('margin-left', 5)
                 ->setOption('margin-right', 5);
 
-            $data["emails"] = "jylrivera96@gmail.com";//$currentInspection->correoCliente;
-            $data["client_name"] = $currentInspection->contract->customer->nomCliente;
-            $data["title"] = "From Xplore Rent A Car";
-            $data["body"] = "This is Demo";
-            $data["currentInspection"] = $currentInspection;
-            $data["today"] = $today;
-            $data["accessories"] = $accessories;
-            $data["photosDirectory"] = $photosDirectory;
-            $data["from"] = env('MAIL_FROM_ADDRESS');
-
-
-            Mail::sendNow('emails.body', $data, function ($message) use ($data, $pdf) {
-                $message->from($data['from'], 'Xplore Rent A Car')
-                    ->to($data["emails"], $data["client_name"])
-                    ->subject($data["title"]);
-                //->attachData($pdf->output(), "Inspeccion de Salida " . $data["currentInspection"]["numInspeccion"]. ".pdf");
-            });
-
-
-            //return view($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
             return response()
                 ->json([
-                    'message' => 'emails was send'
+                    'error' => 0,
+                    'data' => base64_encode($pdf->output())
                 ], 200);
         } catch (Exception $ex) {
             return response()->json(
@@ -332,63 +314,6 @@ class InspectionsController extends Controller
 
 
     }
-
-    /*public function testMail(Request $request)
-    {
-        try {
-            $currentInspection = Inspection::with(
-                [
-                    'car', 'car.model', 'car.model.brand', 'state',
-                    'contract.customer', 'contract.checkOutAgency',
-                    'contract.checkInAgency', 'checkoutAccessories',
-                    'checkinAccessories', 'checkinAgent', 'checkoutAgent',
-                    'photos.autoPart', 'checkOutFuel', 'checkInFuel'
-                ]
-            )
-                ->where('idInspeccion', $idInspeccion)
-                ->first();
-
-            $today = Carbon::today()->format('d/m/Y');
-            $photosDirectory = env('APP_URL');
-            $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
-
-            $view = 'emails.fullSizeReport';
-
-            $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-            $data["emails"] = "melvin.rivera@xplorerentacar.com";//$currentInspection->correoCliente;
-            $data["client_name"] = $currentInspection->contract->customer->nomCliente;
-            $data["title"] = "From Xplore Rent A Car";
-            $data["body"] = "This is Demo";
-            $data["currentInspection"] = $currentInspection;
-            $data["today"] = $today;
-            $data["accessories"] = $accessories;
-            $data["photosDirectory"] = $photosDirectory;
-
-            Mail::send($view, $data, function ($message) use ($data, $pdf) {
-                $message->to($data["emails"], $data["client_name"])
-                    ->subject($data["title"])
-                    ->attachData($pdf->output(), "Inspeccion de Salida " . $data["currentInspection"]["numInspeccion"] . ".pdf");
-            });
-
-            return response()
-                ->json([
-                    'message' => 'emails was send'
-                ], 200);
-
-
-            //return view('emails.checkoutReport', compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-        } catch (Exception $ex) {
-            return response()->json(
-                [
-                    'error' => 1,
-                    'message' => $ex->getMessage()
-                ],
-                500
-            );
-        }
-
-
-    }*/
 
     private function sendEmail($currentInspection)
     {
@@ -396,54 +321,30 @@ class InspectionsController extends Controller
         $photosDirectory = env('APP_URL');
         $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
 
-        $view = 'emails.fullSizeReport';
+        $view = 'emails.midSizeReport';
 
-        $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-        $data["emails"] = "melvin.rivera@xplorerentacar.com";//$currentInspection->correoCliente;
+        $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'))
+            ->setOption('margin-left', 5)
+            ->setOption('margin-right', 5);
+
+        $data["emails"] = $currentInspection->correoCliente;
+        $data["cc"] = [['email' => $currentInspection->correoConductor, 'name' => ''], ['email' => $currentInspection->checkOutAgency->correoPrincipal, 'name' => '']];
         $data["client_name"] = $currentInspection->contract->customer->nomCliente;
-        $data["title"] = "From Xplore Rent A Car";
+        $data["title"] = "Inspección de vehículo No." . $currentInspection->numInspeccion;
         $data["body"] = "This is Demo";
         $data["currentInspection"] = $currentInspection;
         $data["today"] = $today;
         $data["accessories"] = $accessories;
         $data["photosDirectory"] = $photosDirectory;
+        $data["from"] = env('MAIL_FROM_ADDRESS');
 
-        Mail::send('emails.checkoutReport', $data, function ($message) use ($data, $pdf) {
-            $message->to($data["emails"], $data["client_name"])
+        Mail::sendNow('emails.body', $data, function ($message) use ($data, $pdf) {
+            $message->from($data['from'], 'Xplore Rent A Car')
+                ->to($data["emails"], $data["client_name"])
+                ->cc($data["cc"])
                 ->subject($data["title"])
-                ->attachData($pdf->output(), "Inspeccion de Salida " . $data["currentInspection"]["numInspeccion"] . ".pdf");
+                ->attachData($pdf->output(), "Inspeccion " . $data["currentInspection"]["numInspeccion"] . ".pdf");
         });
-    }
-
-
-    private function loadView($idInspeccion, $viewType)
-    {
-        $currentInspection = Inspection::with(
-            [
-                'car', 'car.model', 'car.model.brand', 'state',
-                'contract.customer', 'contract.checkOutAgency',
-                'contract.checkInAgency', 'checkoutAccessories',
-                'checkinAccessories', 'checkinAgent', 'checkoutAgent',
-                'photos.autoPart', 'checkOutFuel', 'checkInFuel'
-            ]
-        )
-            ->where('idInspeccion', $idInspeccion)
-            ->first();
-        $today = Carbon::today()->format('d/m/Y');
-        $photosDirectory = env('APP_URL');
-        $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
-
-        switch ($viewType) {
-            case "fullSize":
-                $view = 'emails.fullSizeReport';
-                break;
-            default:
-                $view = 'emails.midSizeReport';
-                break;
-        }
-        $vw = view($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-
-        return $vw;
     }
 
 }

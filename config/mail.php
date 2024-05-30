@@ -45,7 +45,7 @@ return [
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
-            'sendmail' => '/usr/sbin/sendmail'
+            'local_domain' => env('MAIL_EHLO_DOMAIN'),
 
         ],
 
