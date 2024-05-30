@@ -295,14 +295,31 @@ class InspectionsController extends Controller
             $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'))
                 ->setOption('margin-left', 5)
                 ->setOption('margin-right', 5);
+
+            $data["emails"] = "jylrivera96@gmail.com";//$currentInspection->correoCliente;
+            $data["client_name"] = $currentInspection->contract->customer->nomCliente;
+            $data["title"] = "From Xplore Rent A Car";
+            $data["body"] = "This is Demo";
+            $data["currentInspection"] = $currentInspection;
+            $data["today"] = $today;
+            $data["accessories"] = $accessories;
+            $data["photosDirectory"] = $photosDirectory;
+            $data["from"] = env('MAIL_FROM_ADDRESS');
+
+
+            Mail::sendNow('emails.body', $data, function ($message) use ($data, $pdf) {
+                $message->from($data['from'], 'Xplore Rent A Car')
+                    ->to($data["emails"], $data["client_name"])
+                    ->subject($data["title"]);
+                //->attachData($pdf->output(), "Inspeccion de Salida " . $data["currentInspection"]["numInspeccion"]. ".pdf");
+            });
+
+
             //return view($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'));
-            return $pdf->download('inspeccion.pdf');
-            return response()->json(
-                [
-                    'error' => 0,
-                    'data' => base64_encode($pdf->output())
-                ]
-            );
+            return response()
+                ->json([
+                    'message' => 'emails was send'
+                ], 200);
         } catch (Exception $ex) {
             return response()->json(
                 [
