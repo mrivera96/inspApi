@@ -67,7 +67,7 @@ class InspectionsController extends Controller
         $newInspection->comentariosLlantasDelanteras = $request->comentariosLlantasDelanteras;
         $newInspection->comentariosLlantasTraseras = $request->comentariosLlantasTraseras;
         $newInspection->comentariosBateria = $request->comentariosBateria;
-        $newInspection->fechaSalida = new Carbon($request->fechaSalida);
+        $newInspection->fechaSalida = new Carbon(now());
         $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
         $newInspection->idEstado = 48;
         $newInspection->correoCliente = $request->correoCliente;
