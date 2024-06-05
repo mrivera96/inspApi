@@ -69,6 +69,7 @@ class InspectionsController extends Controller
         $newInspection->comentariosBateria = $request->comentariosBateria;
         $newInspection->fechaSalida = new Carbon(now());
         $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
+        $newInspection->usuarioCreacion = Auth::user()->idUsuario;
         $newInspection->idEstado = 48;
         $newInspection->correoCliente = $request->correoCliente;
         $newInspection->correoConductor = $request->correoConductor;
@@ -164,6 +165,7 @@ class InspectionsController extends Controller
         $newInspection->comentariosBateria = $request->comentariosBateria;
         $newInspection->fechaEntrega = new Carbon(now());
         $newInspection->idUsuarioEntrega = Auth::user()->idUsuario;
+        $newInspection->usuarioModificacion = Auth::user()->idUsuario;
         $newInspection->idEstado = 49;
         $newInspection->correoCliente = $request->correoCliente;
         $newInspection->correoConductor = $request->correoConductor;
@@ -328,7 +330,14 @@ class InspectionsController extends Controller
             ->setOption('margin-right', 5);
 
         $data["emails"] = $currentInspection->correoCliente;
-        $data["cc"] = [['email' => $currentInspection->correoConductor, 'name' => ''], ['email' => $currentInspection->checkOutAgency->correoPrincipal, 'name' => '']];
+        $cc = [];
+        if($currentInspection->correoConductor != null && $currentInspection->correoConductor != ''){
+            array_push($cc,['email' => $currentInspection->correoConductor, 'name' => '']);
+        }
+        if($currentInspection->checkOutAgency->correoPrincipal != null && $currentInspection->checkOutAgency != ''){
+            array_push($cc,['email' => $currentInspection->checkOutAgency->correoPrincipal, 'name' => '']);
+        }
+        $data["cc"] = $cc;
         $data["client_name"] = $currentInspection->contract->customer->nomCliente;
         $data["title"] = "Inspección de vehículo No." . $currentInspection->numInspeccion;
         $data["body"] = "This is Demo";
