@@ -14,7 +14,7 @@ class DamageTypesController extends Controller
     {
         try {
 
-            $damageTypes = DamageType::all();
+            $damageTypes = DamageType::orderBy('descTipoDanio')->get();
             return response()->json(
                 [
                     'error' => 0,

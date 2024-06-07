@@ -66,7 +66,9 @@ class InspectionsController extends Controller
         $newInspection->combSalida = $request->combSalida;
         $newInspection->comentariosLlantasDelanteras = $request->comentariosLlantasDelanteras;
         $newInspection->comentariosLlantasTraseras = $request->comentariosLlantasTraseras;
+        $newInspection->comentariosLlantaRepuesto = $request->comentariosLlantaRepuesto;
         $newInspection->comentariosBateria = $request->comentariosBateria;
+        $newInspection->otrasObservacionesSalida = $request->otrasObservacionesSalida;
         $newInspection->fechaSalida = new Carbon(now());
         $newInspection->idUsuarioSalida = Auth::user()->idUsuario;
         $newInspection->usuarioCreacion = Auth::user()->idUsuario;
@@ -162,7 +164,9 @@ class InspectionsController extends Controller
         $newInspection->combEntrega = $request->combEntrega;
         $newInspection->comentariosLlantasDelanteras = $request->comentariosLlantasDelanteras;
         $newInspection->comentariosLlantasTraseras = $request->comentariosLlantasTraseras;
+        $newInspection->comentariosLlantaRepuesto = $request->comentariosLlantaRepuesto;
         $newInspection->comentariosBateria = $request->comentariosBateria;
+        $newInspection->otrasObservacionesEntrega = $request->otrasObservacionesEntrega;
         $newInspection->fechaEntrega = new Carbon(now());
         $newInspection->idUsuarioEntrega = Auth::user()->idUsuario;
         $newInspection->usuarioModificacion = Auth::user()->idUsuario;
@@ -293,6 +297,7 @@ class InspectionsController extends Controller
             $photosDirectory = env('APP_URL');
             $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
 
+            
             $view = 'emails.midSizeReport';
 
             $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'))
@@ -331,16 +336,20 @@ class InspectionsController extends Controller
 
         $data["emails"] = $currentInspection->correoCliente;
         $cc = [];
-        if($currentInspection->correoConductor != null && $currentInspection->correoConductor != ''){
-            array_push($cc,['email' => $currentInspection->correoConductor, 'name' => '']);
+        if ($currentInspection->correoConductor != null && $currentInspection->correoConductor != '') {
+            array_push($cc, ['email' => $currentInspection->correoConductor, 'name' => '']);
         }
-        if($currentInspection->checkOutAgency->correoPrincipal != null && $currentInspection->checkOutAgency != ''){
-            array_push($cc,['email' => $currentInspection->checkOutAgency->correoPrincipal, 'name' => '']);
+        if ($currentInspection->checkOutAgency->correoPrincipal != null && $currentInspection->checkOutAgency != '') {
+            array_push($cc, ['email' => $currentInspection->checkOutAgency->correoPrincipal, 'name' => '']);
         }
         $data["cc"] = $cc;
         $data["client_name"] = $currentInspection->contract->customer->nomCliente;
-        $data["title"] = "Inspección de vehículo No." . $currentInspection->numInspeccion;
+        if ($currentInspection->idEstado == 48) {
+
+        }
+        $data["title"] = $currentInspection->idEstado == 48 ? "Inspección de Salida de Vehículo ".$currentInspection->car->nemVehiculo. " - No. " . $currentInspection->numInspeccion : "Inspección de Entrada de Vehículo ".$currentInspection->car->nemVehiculo. " - No. " . $currentInspection->numInspeccion;
         $data["body"] = "This is Demo";
+        $data["tipoInspeccion"] = $currentInspection->idEstado == 48 ? "Salida" : "Entrada" ;
         $data["currentInspection"] = $currentInspection;
         $data["today"] = $today;
         $data["accessories"] = $accessories;
