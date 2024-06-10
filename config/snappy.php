@@ -42,6 +42,7 @@ return [
             'lowquality' => false,
             'dpi'=> 596,
             'disable-smart-shrinking' => true,
+			'keep-relative-links' => true,
 
         ],
         'env'     => [],
