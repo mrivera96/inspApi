@@ -59,7 +59,8 @@
         </div>
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center" style="background-color: #dcdcdc;">
-            <h4 style="margin: 0 !important;padding: 0 !important;"><strong> Inspección No. <br> {{$currentInspection->numInspeccion}}</strong></h4>
+            <h4 style="margin: 0 !important;padding: 0 !important;"><strong> Inspección No.
+                    <br> {{$currentInspection->numInspeccion}}</strong></h4>
         </div>
 
     </div>
@@ -160,24 +161,31 @@
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-0">
             <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 mb-0">
-                @foreach ($currentInspection->photos as $photo)
+                @if(sizeof($currentInspection->photos)>0)
+                    @foreach ($currentInspection->photos as $photo)
 
-                    @if($photo->etapa == 'checkout')
+                        @if($photo->etapa == 'checkout')
 
-                        <img
-                            id="photo"
-                            alt="photo"
-                            height="70px"
-                            src="{{public_path($photo->foto)}}"
-                        >
+                            <img
+                                id="photo"
+                                alt="photo"
+                                height="70px"
+                                src="{{public_path($photo->foto)}}"
+                            >
 
-                    @endif
+                        @endif
 
-                @endforeach
-                <img
-                    height="70px"
-                    src="{{public_path($currentInspection->fotoLicencia)}}"
-                >
+                    @endforeach
+                @else
+                    <p>Sin Registro</p>
+                @endif
+
+                @if($currentInspection->fotoLicencia != null)
+                    <img
+                        height="70px"
+                        src="{{public_path($currentInspection->fotoLicencia)}}"
+                    >
+                @endif
             </div>
         </div>
     </div>
@@ -197,20 +205,18 @@
 
             <i class="fas fa-circle-dot"></i>
             Notas Llantas delanteras:
-            {{$currentInspection->comentariosLlantasDelanteras || 'Sin Registro'}}
+            {{$currentInspection->comentariosLlantasDelanteras }}
             <br>
             <i class="fas fa-circle-dot"></i>
             Notas Llantas traseras:
-            {{$currentInspection->comentariosLlantasTraseras ||
-'SinRegistro'}}
+            {{$currentInspection->comentariosLlantasTraseras }}
             <br>
             <i class="fas fa-battery"></i>
-            Notas batería: {{$currentInspection->comentariosBateria ||
-            'SinRegistro'}}
+            Notas batería: {{$currentInspection->comentariosBateria }}
             <br>
             <i class="fas fa-clipboard"></i>
             Otras Observaciones:
-
+            {{$currentInspection->otrasObservacionesSalida}}
         </div>
         @if($currentInspection->firmaClienteSalida )
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right mt-1">
@@ -330,7 +336,7 @@
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <i class="fas fa-clipboard"></i>
-                Otras Observaciones:
+                Otras Observaciones: {{$currentInspection->otrasObservacionesEntrega}}
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
                 @if($currentInspection->firmaClienteEntrega )

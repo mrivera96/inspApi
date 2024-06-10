@@ -79,6 +79,12 @@ class InspectionsController extends Controller
         $accessoriesCheckout = $request->accesoriosSalida;
 
         try {
+            $exists = Inspection::where(['idEstado'=>48, 'idVehiculo'=>$request->idVehiculo])->exists();
+
+            if($exists){
+                throw new \ErrorException('Ya hay una inspeccion pendiente para este vehiculo');
+
+            }
             $newInspection->save();
             $newInspection->firmaClienteSalida = $request->firmaClienteSalida;
 
@@ -297,7 +303,7 @@ class InspectionsController extends Controller
             $photosDirectory = env('APP_URL');
             $accessories = Accessory::where('isActivo', 1)->orderBy('nomAccesorio')->get();
 
-            
+
             $view = 'emails.midSizeReport';
 
             $pdf = PDF::loadView($view, compact('currentInspection', 'today', 'accessories', 'photosDirectory'))
