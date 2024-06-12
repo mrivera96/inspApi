@@ -36,7 +36,7 @@ class DamageTypesController extends Controller
         try {
             $newDamageType = new DamageType();
             $newDamageType->descTipoDanio = $request->descTipoDanio;
-            $newDamageType->isActivo = $request->isActivo;
+            $newDamageType->isActivo = true;
             $newDamageType->usuarioCreacion = Auth::user()->idUsuario;
             $newDamageType->save();
 
