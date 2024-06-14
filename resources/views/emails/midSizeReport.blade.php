@@ -76,7 +76,7 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <i class="fas fa-circle-user"></i>
             Cliente:
-            {{$currentInspection->contract->customer->nomCliente}}
+            {{$currentInspection->contract->customer->nomCliente.' '.$currentInspection->contract->customer->apeCliente}}
         </div>
 
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
