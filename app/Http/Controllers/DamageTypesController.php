@@ -14,7 +14,7 @@ class DamageTypesController extends Controller
     {
         try {
 
-            $damageTypes = DamageType::orderBy('descTipoDanio')->get();
+            $damageTypes = DamageType::orderBy('orden')->get();
             return response()->json(
                 [
                     'error' => 0,
@@ -36,6 +36,7 @@ class DamageTypesController extends Controller
         try {
             $newDamageType = new DamageType();
             $newDamageType->descTipoDanio = $request->descTipoDanio;
+            $newDamageType->orden = $request->orden;
             $newDamageType->isActivo = true;
             $newDamageType->usuarioCreacion = Auth::user()->idUsuario;
             $newDamageType->save();
@@ -57,6 +58,7 @@ class DamageTypesController extends Controller
         try {
             $currentDamageType = DamageType::where('idTipoDanio',$request->idTipoDanio)->first();
             $currentDamageType->descTipoDanio = $request->descTipoDanio;
+            $currentDamageType->orden = $request->orden;
             $currentDamageType->isActivo = $request->isActivo;
             $currentDamageType->usuarioModificacion = Auth::user()->idUsuario;
             $currentDamageType->update();

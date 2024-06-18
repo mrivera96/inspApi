@@ -138,12 +138,8 @@
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                @foreach ($accessories as $accessory )
-                    @if($currentInspection->checkoutAccessories->contains($accessory))
-                        <i class="fa-regular fa-square-check"></i> {{ $accessory->nomAccesorio }}
-                    @else
-                        <i class="fa-regular fa-square"></i> {{ $accessory->nomAccesorio }}
-                    @endif
+                @foreach ($currentInspection->checkoutAccessories as $accessory )
+                    <i class="fa-regular fa-square-check"></i> {{ $accessory->nomAccesorio }}
                 @endforeach
             </div>
         </div>
@@ -283,12 +279,8 @@
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                    @foreach ($accessories as $accessory )
-                        @if($currentInspection->checkinAccessories->contains($accessory))
-                            <i class="fa-regular fa-square-check"></i> {{ $accessory->nomAccesorio }}
-                        @else
-                            <i class="fa-regular fa-square"></i> {{ $accessory->nomAccesorio }}
-                        @endif
+                    @foreach ($currentInspection->checkinAccessories as $accessory )
+                        <i class="fa-regular fa-square-check"></i> {{ $accessory->nomAccesorio }}
                     @endforeach
                 </div>
             </div>
@@ -297,7 +289,7 @@
         <div class="row text-center" style="background-color: #dcdcdc">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <strong>
-                    Fotografías
+                    Fotografías de Daños
                 </strong>
             </div>
         </div>
@@ -316,7 +308,6 @@
                                 height="70px"
                                 src="{{public_path($photo->foto)}}"
                             >
-
                         @endif
 
                     @endforeach
@@ -349,8 +340,6 @@
                 @else
                     <p>Sin Registro</p>
                 @endif
-
-
             </div>
         </div>
 

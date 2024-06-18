@@ -3,6 +3,7 @@
 /public/web.config
 /public/build
 /public/hot
+/public/img
 /public/storage
 /storage/*.key
 /vendor
