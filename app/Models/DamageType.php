@@ -21,4 +21,5 @@ class DamageType extends Model
         'idTipoDanio' => 'integer',
     ];
 
+
 }
