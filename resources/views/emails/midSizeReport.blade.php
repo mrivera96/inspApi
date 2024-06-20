@@ -156,18 +156,20 @@
     <div class="row">
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-0">
-            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 mb-0">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-0">
                 @if(sizeof($currentInspection->photos)>0)
                     @foreach ($currentInspection->photos as $photo)
 
                         @if($photo->etapa == 'checkout')
-
-                            <img
-                                id="photo"
-                                alt="photo"
-                                height="70px"
-                                src="{{public_path($photo->foto)}}"
-                            >
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <img
+                                    id="photo"
+                                    alt="photo"
+                                    height="70px"
+                                    src="{{public_path($photo->foto)}}"
+                                >
+                                <br>{{$photo->autoPart->descPieza}}
+                            </div>
 
                         @endif
 
@@ -301,13 +303,16 @@
                     @foreach ($currentInspection->photos as $photo)
 
                         @if($photo->etapa == 'checkin')
-
-                            <img
-                                id="photo"
-                                alt="photo"
-                                height="70px"
-                                src="{{public_path($photo->foto)}}"
-                            >
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                <img
+                                    id="photo"
+                                    alt="photo"
+                                    height="70px"
+                                    src="{{public_path($photo->foto)}}"
+                                >
+                                <br>{{$photo->autoPart->descPieza}}
+                                <br>{{$photo->damages->damageType->descTipoDanio}}
+                            </div>
                         @endif
 
                     @endforeach
