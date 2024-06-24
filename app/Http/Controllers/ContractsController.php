@@ -24,7 +24,7 @@ class ContractsController extends Controller
                     'additionalDriver'
 
                 ]
-            )->where('idEstado', 9)->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato', 'idAgenciaSalida', 'idAgenciaEntrega', 'idTanqueSal', 'idTanqueEnt', 'idConductor', 'idConductorAdic')->get();
+            )->where('idEstado', [9,58])->select('idContrato', 'idVehiculo', 'idEstado', 'idCliente', 'numContrato', 'idAgenciaSalida', 'idAgenciaEntrega', 'idTanqueSal', 'idTanqueEnt', 'idConductor', 'idConductorAdic')->get();
 
             return response()->json(
                 [
