@@ -82,7 +82,11 @@ class InspectionsController extends Controller
             $exists = Inspection::where(['idEstado'=>48, 'idVehiculo'=>$request->idVehiculo])->exists();
 
             if($exists){
-                throw new \ErrorException('Ya hay una inspeccion pendiente para este vehiculo');
+                return response()->json([
+                    'error' => 1,
+                    'message' => 'Ya hay una inspección pendiente para este vehiculo'
+                ],500);
+
 
             }
             $newInspection->save();
