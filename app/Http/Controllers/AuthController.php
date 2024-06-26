@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -28,6 +29,7 @@ class AuthController extends Controller
             if (UsersController::usuarioActivo($nickname) > 0) {
                 $cripPass =  $this->obtenerCifrado($password);
                 $auth = User::where('nickUsuario', $nickname)->where('passUsuario', $cripPass)->first();
+				
 
                 if ($auth) {
                     Auth::login($auth);
@@ -76,8 +78,47 @@ class AuthController extends Controller
     private function obtenerCifrado($psswd)
     {
         $httpClient = new Client(['verify' => false]);
-        $res = $httpClient->get('https://appconductores.xplorerentacar.com/mod.ajax/encriptar.php?password=' . $psswd);
+		$params = [
+			'query' => [
+			'password' => $psswd
+			],'headers'=>['Authorization' => 'Basic d2ViYXBpOlhwbG9yZTE5JA==','api_key'=>'Xplore19$']
+		];
+
+
+        $res = $httpClient->get('http://190.4.56.14/XploreRestApi/seguridad/encriptar', $params );
+		
         return json_decode($res->getBody());
+    }
+	
+	public function encrypt($iString): string
+    {
+        $pwd = "";
+
+        $IL_LONGI = (int)(strlen($iString) / 2);
+        $vl_cadena_conv = substr($iString, -$IL_LONGI) . $iString . substr($iString, 0, $IL_LONGI);
+
+        $IL_LONGI = strlen($vl_cadena_conv);
+        $IL_COUNT = 0;
+        $IL_SUMA = 0;
+
+        do {
+            $IL_SUMA = $IL_SUMA + ord(substr($vl_cadena_conv, $IL_COUNT, 1));
+            $IL_COUNT = $IL_COUNT + 1;
+
+        } while ($IL_COUNT <= $IL_LONGI);
+
+        $IL_BASE = intval($IL_SUMA / $IL_LONGI);
+        $IL_COUNT = 0;
+
+        do {
+            $pwd = $pwd . Chr(ord(substr($vl_cadena_conv, $IL_COUNT, 1)) + $IL_BASE);
+            $IL_COUNT = $IL_COUNT + 1;
+        } while ($IL_COUNT < $IL_LONGI);
+
+
+        $pwd = Chr($IL_BASE - 15) . $pwd . Chr(2 * $IL_BASE);
+
+        return $pwd;
     }
 
     public function logout(Request $request)
