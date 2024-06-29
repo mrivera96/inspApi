@@ -28,7 +28,8 @@ class InspectionsController extends Controller
     public function list(): JsonResponse
     {
         try {
-            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages', 'damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])->get();
+            $inspections = Inspection::with(['car', 'car.model', 'car.model.brand', 'state', 'contract.customer', 'contract.checkOutAgency', 'contract.checkInAgency', 'checkoutAccessories', 'checkinAccessories', 'checkinAgent', 'checkoutAgent', 'damages', 'damages.photo', 'damages.damageType', 'damages.damagePart', 'photos.autoPart', 'checkOutFuel', 'checkInFuel'])
+			->orderBy('created_at','desc')->get();
 
             return response()->json(
                 [
@@ -206,12 +207,20 @@ class InspectionsController extends Controller
 
 
             if ($accessoriesCheckin != null) {
+				
                 foreach ($accessoriesCheckin as $accessory) {
-                    $newInspectionAccessory = new InspectionAccesories();
-                    $newInspectionAccessory->idInspeccion = $newInspection->idInspeccion;
-                    $newInspectionAccessory->idAccesorio = $accessory['idAccesorio'];
-                    $newInspectionAccessory->etapa = "checkin";
-                    $newInspectionAccessory->save();
+					$exists = InspectionAccesories::where([
+					['idInspeccion',$newInspection->idInspeccion],
+					['idAccesorio',$accessory['idAccesorio']],
+					['etapa','checkin']
+					])->count();
+					if($exists = 0){
+						$newInspectionAccessory = new InspectionAccesories();
+						$newInspectionAccessory->idInspeccion = $newInspection->idInspeccion;
+						$newInspectionAccessory->idAccesorio = $accessory['idAccesorio'];
+						$newInspectionAccessory->etapa = "checkin";
+						$newInspectionAccessory->save();
+					}
                 }
             }
 
